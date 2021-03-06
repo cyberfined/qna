@@ -8,7 +8,7 @@ FactoryBot.define do
     end
 
     trait :bodyless do
-      title { nil }
+      body { nil }
     end
 
     trait :invalid do
