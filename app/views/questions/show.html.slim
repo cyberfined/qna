@@ -1,4 +1,11 @@
 h1 = question.title
 p = question.body
+- if user_signed_in?
+  = render partial: 'shared/errors', locals: { resource: answer }
+  = form_with model: [question, answer], local: true do |form|
+    p
+      = form.label :body
+      = form.text_field :body
+    p = form.submit 'Answer'
 h2 Answers
 = render question.answers

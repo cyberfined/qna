@@ -29,7 +29,7 @@ RSpec.feature 'User can give answer to a question', %q{
     scenario 'User tries to create answer with blanket body' do
       post_answer(bodyless_answer)
 
-      expect(page).to have_content "Body can't be blanket"
+      expect(page).to have_content "Body can't be blank"
     end
   end
 
