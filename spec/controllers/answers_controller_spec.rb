@@ -2,10 +2,11 @@ RSpec.describe AnswersController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   describe 'POST #create' do
-    let!(:question) { Question.create!(attributes_for(:question)) }
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
 
     context 'when user is authenticated' do
-      before { sign_in create(:user) }
+      before { sign_in user }
 
       context 'with valid attributes' do
         it 'creates new answer in the database' do

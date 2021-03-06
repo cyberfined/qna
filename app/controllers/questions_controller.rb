@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
+  before_action :authenticate_user!, only: %i[new create destroy]
 
   expose :questions, ->{ Question.all }
   expose :question
@@ -11,6 +11,15 @@ class QuestionsController < ApplicationController
       redirect_to question, notice: 'You have succesfully create a question'
     else
       render :new
+    end
+  end
+
+  def destroy
+    if current_user == question.user
+      question.destroy
+      redirect_to :questions, notice: 'You successfully delete the question'
+    else
+      render file: Rails.root.join(Rails.public_path, "401.html"), status: :unauthorized
     end
   end
 

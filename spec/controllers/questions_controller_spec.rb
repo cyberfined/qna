@@ -40,4 +40,51 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when user is authenticated' do
+      let!(:user) { create(:user) }
+      before { sign_in user }
+
+      context 'valid actions' do
+        let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+        it 'deletes question from the database' do
+          expect {
+            delete :destroy, params: { id: question.id }
+          }.to change { Question.count }.by(-1)
+        end
+
+        it 'redirects to questions' do
+          delete :destroy, params: { id: question.id }
+          expect(response).to redirect_to questions_path
+        end
+      end
+
+      context 'invalid actions' do
+        let!(:another_question) { create(:user, :second).questions.create!(attributes_for(:question)) }
+
+        it "tries to delete another user's question" do
+          expect {
+            delete :destroy, params: { id: another_question.id }
+          }.to_not change { Question.count }
+        end
+
+        it 'returns an unauthorized error' do
+          delete :destroy, params: { id: another_question.id }
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
+    context 'when user is unauthenticated' do
+      let!(:question) { create(:user).questions.create!(attributes_for(:question)) }
+
+      it "tries to delete another user's question" do
+        expect {
+          delete :destroy, params: { id: question.id }
+        }.to_not change { Question.count }
+      end
+    end
+  end
 end
