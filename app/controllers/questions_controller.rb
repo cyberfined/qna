@@ -1,13 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create]
 
+  expose :questions, ->{ Question.all }
   expose :question
-
-  def index
-  end
-
-  def show
-  end
 
   def create
     if question.save
