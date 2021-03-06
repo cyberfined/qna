@@ -6,22 +6,22 @@ RSpec.feature 'User can delete his question', %q{
   describe 'Authenticated user actions' do
     given!(:user) { create(:user) }
     given(:another_user) { create(:user, :second) }
-    given(:question) { user.questions.create!(attributes_for(:question)) }
-    given(:another_question) { another_user.questions.create(attributes_for(:question)) }
 
-    background do
-      sign_in(user)
-      visit questions_path
-    end
+    background { sign_in(user) }
 
     scenario 'User deletes his question' do
+      question = user.questions.create!(attributes_for(:question))
+      visit questions_path
       click_on question.title
       click_on 'Delete'
 
       expect(page).to have_content 'You successfully delete the question'
+      expect(page).to have_no_content question.title
     end
 
     scenario "User tries to delete other user's question" do
+      another_question = another_user.questions.create!(attributes_for(:question))
+      visit questions_path
       click_on another_question.title
       
       expect(page).to have_no_button 'Delete'
@@ -29,8 +29,8 @@ RSpec.feature 'User can delete his question', %q{
   end
 
   describe 'Unauthenticated user actions' do
-    given(:user) { create(:user) }
-    given(:question) { user.questions.create!(attributes_for(:question)) }
+    given!(:user) { create(:user) }
+    given!(:question) { user.questions.create!(attributes_for(:question)) }
 
     scenario 'Unauthenticated user tries to delete a question' do
       visit questions_path

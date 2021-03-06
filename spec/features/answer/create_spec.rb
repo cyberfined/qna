@@ -3,7 +3,7 @@ RSpec.feature 'User can give answer to a question', %q{
   As an authenticated user
   I'd like to give an answer
 } do
-  given!(:question) { create(:question) }
+  given!(:question) { create(:user, :second).questions.create!(attributes_for(:question)) }
 
   def post_answer(answer)
     fill_in 'Body', with: answer.body
