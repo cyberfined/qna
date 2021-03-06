@@ -8,6 +8,14 @@ RSpec.feature 'User can sign up', %q{
   given(:invalid_email_user) { build(:user, :invalid_email) }
   given(:short_password_user) { build(:user, :short_password) }
 
+  def sign_up(user)
+    visit new_user_registration_path
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    fill_in 'Password confirmation', with: user.password
+    click_on 'Sign up'
+  end
+
   scenario 'User signs up' do
     sign_up(user)
     
