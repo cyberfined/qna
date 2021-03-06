@@ -9,7 +9,7 @@ RSpec.feature 'User can ask a question', %q{
     given(:titleless_question) { build(:question, :titleless) }
     given(:bodyless_question) { build(:question, :bodyless) }
 
-    before do
+    background do
       sign_in(user)
       visit questions_path
       click_on 'Ask question'

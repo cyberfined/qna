@@ -15,7 +15,7 @@ RSpec.feature 'User can give answer to a question', %q{
     given(:answer) { build(:answer) }
     given(:bodyless_answer) { build(:answer, :bodyless) }
 
-    before do
+    background do
       sign_in(user)
       visit question_path(question)
     end
