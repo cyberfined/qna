@@ -10,5 +10,10 @@ FactoryBot.define do
     trait :short_password do
       password { "12345" }
     end
+
+    trait :second do
+      email { "anothermail@example.com" }
+      password { "MyString" }
+    end
   end
 end
