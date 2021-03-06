@@ -3,7 +3,12 @@ RSpec.feature 'User can watch all questions', %q{
   As an unauthenticated or authenticated user
   I'd like to watch all questions
 } do
-  given!(:questions) { create_list(:question, 3) }
+  given!(:questions) do
+    # TODO: use faker to randomize questions in factory
+    Question.create!([{ title: 'Question1', body: 'Body1' },
+                      { title: 'Question2', body: 'Body2' },
+                      { title: 'Question3', body: 'Body3' }])
+  end
 
   scenario 'User watches all questions' do
     visit questions_path
