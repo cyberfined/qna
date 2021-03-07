@@ -17,6 +17,7 @@ RSpec.feature 'User can delete his answer', %q{
         click_on question.title
         click_on 'Delete answer'
 
+        expect(page).to have_content 'You successfully delete the answer'
         expect(page).to have_no_content answer.body
       end
     end
@@ -30,7 +31,7 @@ RSpec.feature 'User can delete his answer', %q{
         visit questions_path
         click_on question.title
 
-        expect(page).to have_no_content 'Delete answer'
+        expect(page).to have_no_button 'Delete answer'
       end
     end
   end
@@ -43,7 +44,7 @@ RSpec.feature 'User can delete his answer', %q{
       visit questions_path
       click_on question.title
 
-      expect(page).to have_no_content 'Delete answer'
+      expect(page).to have_no_button 'Delete answer'
     end
   end
 end
