@@ -1,1 +1,4 @@
-p =answer.body
+div
+  p =answer.body
+  - if user_signed_in? && current_user == answer.user
+    p = button_to 'Delete answer', answer_path(answer), method: :delete

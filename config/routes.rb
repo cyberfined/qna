@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :questions, only: %i[index show new create destroy] do
-    resources :answers, only: :create, shallow: true
+    resources :answers, only: %i[create destroy], shallow: true
   end
 end
