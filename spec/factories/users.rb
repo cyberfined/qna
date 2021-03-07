@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     email { "myemail@example.com" }
-    password { "MyString" }
+    password { "password" }
 
     trait :invalid_email do
       email { "wrongemail" }
@@ -13,7 +13,7 @@ FactoryBot.define do
 
     trait :second do
       email { "anothermail@example.com" }
-      password { "MyString" }
+      password { "password" }
     end
   end
 end

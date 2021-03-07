@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :question do
-    title { "MyString" }
-    body { "MyString" }
+    user { nil }
+    title { "Question's title" }
+    body { "Question's body" }
 
     trait :titleless do
       title { nil }
