@@ -7,12 +7,11 @@ class AnswersController < ApplicationController
   def create
     answer.user = current_user
     answer.question = question
-    flash_params = if answer.save
-                     { notice: 'You have successfully post an answer' }
-                   else
-                     { alert: flash_errors }
-                   end
-    redirect_to question, flash_params
+    if answer.save
+      redirect_to question, notice: 'You have successfully post an answer'
+    else
+      render 'questions/show'
+    end
   end
 
   def destroy
@@ -28,9 +27,5 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
-  end
-
-  def flash_errors
-    answer.errors.map(&:full_message).join("\n")
   end
 end
