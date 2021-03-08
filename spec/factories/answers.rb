@@ -1,8 +1,12 @@
 FactoryBot.define do
+  sequence :answer_body do |n|
+    "Answer #{n} body"
+  end
+
   factory :answer do
     user { nil }
     question { nil }
-    body { "Answer's body" }
+    body { generate :answer_body }
 
     trait :bodyless do
       body { nil }

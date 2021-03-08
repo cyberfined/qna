@@ -1,8 +1,16 @@
 FactoryBot.define do
+  sequence :question_title do |n|
+    "Question #{n} title"
+  end
+
+  sequence :question_body do |n|
+    "Question #{n} body"
+  end
+
   factory :question do
     user { nil }
-    title { "Question's title" }
-    body { "Question's body" }
+    title { generate :question_title }
+    body { generate :question_body }
 
     trait :titleless do
       title { nil }

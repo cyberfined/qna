@@ -5,14 +5,9 @@ RSpec.feature 'User can watch a question and answers to it', %q{
 } do
   given!(:user) { create(:user) }
   given!(:question) { user.questions.create!(attributes_for(:question)) }
-  given!(:answers) do
-    # TODO: use faker to randomize answers in factory
-    question.answers.create!([{ body: 'answer1', user: user },
-                              { body: 'answer2', user: user },
-                              { body: 'answer3', user: user }])
-  end
+  given!(:answers) { create_list(:answer, 3, question: question, user: user) }
 
-  scenario "User watch the question's page" do
+  scenario "User watches the question's page" do
     visit questions_path
     click_on question.title
 

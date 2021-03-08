@@ -3,7 +3,7 @@ RSpec.feature 'User can ask a question', %q{
   As an authenticated user
   I'd like to ask a question
 } do
-  describe 'Authenticated user actions' do
+  describe 'Authenticated user' do
     given!(:user) { create(:user) }
     given(:question) { build(:question) }
     given(:titleless_question) { build(:question, :titleless) }
@@ -21,19 +21,19 @@ RSpec.feature 'User can ask a question', %q{
       click_on 'Ask'
     end
 
-    scenario 'User asks a question' do
+    scenario 'asks a question' do
       ask_question(question)
 
       expect(page).to have_content 'You have succesfully create a question'
     end
 
-    scenario 'User tries to ask question with a blank title' do
+    scenario 'tries to ask question with a blank title' do
       ask_question(titleless_question)
 
       expect(page).to have_content "Title can't be blank"
     end
 
-    scenario 'User tries to ask question with a blank body' do
+    scenario 'tries to ask question with a blank body' do
       ask_question(bodyless_question)
 
       expect(page).to have_content "Body can't be blank"

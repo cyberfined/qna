@@ -3,15 +3,15 @@ RSpec.feature 'User can give answer to a question', %q{
   As an authenticated user
   I'd like to give an answer
 } do
-  given!(:question) { create(:user, :second).questions.create!(attributes_for(:question)) }
+  given!(:user) { create(:user) }
+  given!(:question) { user.questions.create!(attributes_for(:question)) }
 
   def post_answer(answer)
     fill_in 'Body', with: answer.body
     click_on 'Answer'
   end
 
-  describe "Authenticated user's actions" do
-    given!(:user) { create(:user) }
+  describe 'Authenticated user' do
     given(:answer) { build(:answer) }
     given(:bodyless_answer) { build(:answer, :bodyless) }
 
@@ -20,13 +20,13 @@ RSpec.feature 'User can give answer to a question', %q{
       visit question_path(question)
     end
 
-    scenario 'User answers to the question' do
+    scenario 'answers to the question' do
       post_answer(answer)
 
       expect(page).to have_content 'You have successfully post an answer'
     end
 
-    scenario 'User tries to create answer with blanket body' do
+    scenario 'tries to create answer with blank body' do
       post_answer(bodyless_answer)
 
       expect(page).to have_content "Body can't be blank"

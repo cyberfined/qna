@@ -1,6 +1,4 @@
 RSpec.describe QuestionsController, type: :controller do
-  include Devise::Test::ControllerHelpers
-
   describe 'POST #create' do
     context 'when user is authenticated' do
       before { sign_in create(:user) }
@@ -46,7 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:user) { create(:user) }
       before { sign_in user }
 
-      context 'valid actions' do
+      context 'authorized actions' do
         let!(:question) { user.questions.create!(attributes_for(:question)) }
 
         it 'deletes question from the database' do
@@ -61,8 +59,8 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      context 'invalid actions' do
-        let!(:another_question) { create(:user, :second).questions.create!(attributes_for(:question)) }
+      context 'unauthorized actions' do
+        let!(:another_question) { create(:user).questions.create!(attributes_for(:question)) }
 
         it "tries to delete another user's question" do
           expect {

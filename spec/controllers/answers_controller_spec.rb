@@ -1,6 +1,4 @@
 RSpec.describe AnswersController, type: :controller do
-  include Devise::Test::ControllerHelpers
-
   describe 'POST #create' do
     let!(:user) { create(:user) }
     let!(:question) { user.questions.create!(attributes_for(:question)) }
@@ -51,13 +49,13 @@ RSpec.describe AnswersController, type: :controller do
 
       before { sign_in user }
 
-      context 'valid actions' do
+      context 'authorized actions' do
         let!(:answer) { question.answers.create!(attributes_for(:answer, user: user)) }
 
         it 'deletes answer from the database' do
           expect {
             delete :destroy, params: { id: answer.id }
-          }.to change { question.answers.count }.by(-1)
+          }.to change { Answer.count }.by(-1)
         end
 
         it 'redirects to question' do
@@ -66,14 +64,14 @@ RSpec.describe AnswersController, type: :controller do
         end
       end
 
-      context 'invalid actions' do
-        let!(:another_user) { create(:user, :second) }
+      context 'unauthorized actions' do
+        let!(:another_user) { create(:user) }
         let!(:another_answer) { question.answers.create!(attributes_for(:answer, user: another_user)) }
 
         it "tries to delete another user's answer" do
           expect {
             delete :destroy, params: { id: another_answer.id }
-          }.to_not change { question.answers.count }
+          }.to_not change { Answer.count }
         end
 
         it 'returns an unauthorized error' do
@@ -91,7 +89,7 @@ RSpec.describe AnswersController, type: :controller do
       it "tries to delete another user's question" do
         expect {
           delete :destroy, params: { id: answer.id }
-        }.to_not change { question.answers.count }
+        }.to_not change { Answer.count }
       end
     end
   end
