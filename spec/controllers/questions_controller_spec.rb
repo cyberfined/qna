@@ -70,7 +70,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'returns an unauthorized error' do
           delete :destroy, params: { id: another_question.id }
-          expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end

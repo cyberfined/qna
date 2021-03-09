@@ -19,7 +19,7 @@ class QuestionsController < ApplicationController
       question.destroy
       redirect_to :questions, notice: 'You successfully delete the question'
     else
-      render file: Rails.root.join(Rails.public_path, "401.html"), status: :unauthorized
+      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
     end
   end
 
