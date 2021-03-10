@@ -8,22 +8,13 @@ RSpec.describe User, type: :model do
     let(:user) { create(:user) }
     let(:another_user) { create(:user) }
     let(:question) { create(:question, user: user) }
-    let(:answer) { question.answers.create!(attributes_for(:answer, user: user)) }
 
     it 'should return true because user owns this question' do
-      expect(user.author_of?(question)).to eq true
+      expect(user).to be_author_of question
     end
 
-    it 'should return true because user owns this answer' do
-      expect(user.author_of?(answer)).to eq true
-    end
-
-    it "should return true because user doesn't own this question" do
-      expect(another_user.author_of?(question)).to eq false
-    end
-
-    it "should return true because user doesn't own this answer" do
-      expect(another_user.author_of?(answer)).to eq false
+    it "should return false because user doesn't own this question" do
+      expect(another_user).to_not be_author_of question
     end
   end
 end
