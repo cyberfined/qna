@@ -85,4 +85,73 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #update' do
+    context 'when user is authenticated' do
+      let!(:user) { create(:user) }
+      let(:valid_question) { build(:question) }
+      let(:invalid_question) { build(:question, :invalid) }
+
+      before { sign_in user }
+
+      context 'authorized actions' do
+        let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+        context 'with valid attributes' do
+          before do
+            post :update, params: { id: question.id, question: valid_question.attributes, format: :js}
+          end
+
+          it 'updates question' do
+            question.reload
+            expect(question.title).to eq(valid_question.title)
+            expect(question.body).to eq(valid_question.body)
+          end
+
+          it 'renders update template' do
+            expect(response).to render_template :update
+          end
+        end
+
+        context 'with invalid attributes' do
+          before do
+            post :update, params: { id: question.id, question: invalid_question.attributes, format: :js}
+          end
+
+          it 'tries to update question' do
+            expect { question.reload }.to_not change { question }
+          end
+
+          it 'renders update template' do
+            expect(response).to render_template :update
+          end
+        end
+      end
+
+      context 'unauthorized actions' do
+        let!(:another_question) { create(:user).questions.create!(attributes_for(:question)) }
+
+        before do
+          post :update, params: { id: another_question.id, question: valid_question.attributes, format: :js}
+        end
+
+        it 'tries to update question' do
+          expect { another_question.reload }.to_not change { another_question }
+        end
+
+        it 'returns an unauthorized error' do
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context 'when user is unauthenticated' do
+      let!(:question) { create(:user).questions.create!(attributes_for(:question)) }
+
+      it "tries to edit another user's question" do
+        post :update, params: { id: question.id, question: attributes_for(:question), format: :js}
+        expect { question.reload }.to_not change { question }
+      end
+    end
+  end
 end
