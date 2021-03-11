@@ -4,11 +4,14 @@ p = question.body
   - if current_user.author_of?(question)
     = button_to 'Delete', question_path(question), method: :delete
 
-  = render partial: 'shared/errors', locals: { resource: answer }
-  = form_with model: [question, answer], local: true do |form|
+  .answer-errors
+
+  = form_with model: [question, answer], local: false do |form|
     p
       = form.label :body
       = form.text_field :body
     p = form.submit 'Answer'
+
 h2 Answers
-= render question.answers
+.answers
+  = render question.answers

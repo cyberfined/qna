@@ -7,11 +7,7 @@ class AnswersController < ApplicationController
   def create
     answer.user = current_user
     answer.question = question
-    if answer.save
-      redirect_to question, notice: 'You have successfully post an answer'
-    else
-      render 'questions/show'
-    end
+    answer.save
   end
 
   def destroy
