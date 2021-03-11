@@ -1,5 +1,5 @@
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.7.2/ext/bootsnap
-/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210303-114-poiwr.rb extconf.rb
+/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210311-124-1ddbv7b.rb extconf.rb
 creating Makefile
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.7.2/ext/bootsnap
@@ -12,4 +12,4 @@ linking shared-object bootsnap/bootsnap.so
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.7.2/ext/bootsnap
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 bootsnap.so ./.gem.20210303-114-1r1h1xj/bootsnap
+/usr/bin/install -c -m 0755 bootsnap.so ./.gem.20210311-124-1qw4pa7/bootsnap

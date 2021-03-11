@@ -1,5 +1,5 @@
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
-/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210303-114-d2bh88.rb extconf.rb
+/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210311-124-lyhckj.rb extconf.rb
 creating Makefile
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
@@ -12,4 +12,4 @@ linking shared-object skiptrace/internal/cruby.so
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bindex-0.8.1/ext/skiptrace
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 cruby.so ./.gem.20210303-114-5n6s2a/skiptrace/internal
+/usr/bin/install -c -m 0755 cruby.so ./.gem.20210311-124-1eafl8g/skiptrace/internal

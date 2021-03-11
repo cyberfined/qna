@@ -1,5 +1,5 @@
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.16/ext/mri
-/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210305-287-1e97su0.rb extconf.rb
+/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210311-2836-8ttfp9.rb extconf.rb
 creating Makefile
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.16/ext/mri
@@ -19,4 +19,4 @@ linking shared-object bcrypt_ext.so
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.16/ext/mri
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 bcrypt_ext.so ./.gem.20210305-287-1pv3ppm
+/usr/bin/install -c -m 0755 bcrypt_ext.so ./.gem.20210311-2836-1of4img

@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.email = ["mail@daniel-mendler.de".freeze]
   s.homepage = "https://github.com/minad/mimemagic".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.2.7".freeze
+  s.rubygems_version = "3.2.13".freeze
   s.summary = "Fast mime detection by extension or content".freeze
 
-  s.installed_by_version = "3.2.7" if s.respond_to? :installed_by_version
+  s.installed_by_version = "3.2.13" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

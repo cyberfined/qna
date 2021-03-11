@@ -1,5 +1,5 @@
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/sqlite3-1.4.2/ext/sqlite3
-/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210303-114-bw4d6t.rb extconf.rb
+/usr/bin/ruby -I /usr/lib/ruby/2.7.0 -r ./siteconf20210311-124-1331hd3.rb extconf.rb
 checking for sqlite3.h... yes
 checking for pthread_create() in -lpthread... yes
 checking for -ldl... yes
@@ -73,4 +73,4 @@ linking shared-object sqlite3/sqlite3_native.so
 
 current directory: /home/undefined/qna/vendor/bundle/ruby/2.7.0/gems/sqlite3-1.4.2/ext/sqlite3
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 sqlite3_native.so ./.gem.20210303-114-145e2vf/sqlite3
+/usr/bin/install -c -m 0755 sqlite3_native.so ./.gem.20210311-124-e4jjj6/sqlite3
