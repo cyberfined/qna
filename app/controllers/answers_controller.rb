@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :authenticate_user!, only: %i[create update destroy]
 
   expose :answer
   expose :question
@@ -8,6 +8,14 @@ class AnswersController < ApplicationController
     answer.user = current_user
     answer.question = question
     answer.save
+  end
+
+  def update
+    if current_user.author_of?(answer)
+      answer.update(answer_params)
+    else
+      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
+    end
   end
 
   def destroy

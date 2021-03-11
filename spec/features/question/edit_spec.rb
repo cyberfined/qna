@@ -18,9 +18,16 @@ RSpec.feature 'User can edit his question', %q{
       before do
         visit questions_path
         click_on question.title
-        expect(page).to have_no_field 'question[title]'
-        expect(page).to have_no_field 'question[body]'
-        expect(page).to have_no_button 'Update question'
+
+        page.document.synchronize seconds=20 do
+          if page.has_css? '.question-header'
+            expect(page).to have_no_field 'question[title]'
+            expect(page).to have_no_field 'question[body]'
+            expect(page).to have_no_button 'Update question'
+          else
+            nil
+          end
+        end
       end
 
       def edit_question(new_question)

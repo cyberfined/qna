@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    editButton = document.querySelector("#edit-button");
+    const editButton = document.querySelector("#edit-question-button");
     if(editButton === null)
         return;
 
-    editButton.addEventListener("click", showEditForm);
+    editButton.addEventListener("click", editQuestionButtonHandler);
 });
 
-function showEditForm() {
-    document.querySelector("#edit-form").classList.remove("hide");
+function editQuestionButtonHandler() {
+    document.querySelector("#edit-question-form").classList.remove("hide");
     this.classList.add("hide");
 }

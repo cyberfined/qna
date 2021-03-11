@@ -3,7 +3,7 @@ p class="question-body" = question.body
 - if user_signed_in?
   - if current_user.author_of?(question)
     .question-errors
-    = form_with model: question, local: false, class: 'hide', id: 'edit-form' do |form|
+    = form_with model: question, local: false, class: 'hide', id: 'edit-question-form' do |form|
       p
         = form.label :title
         = form.text_field :title
@@ -11,7 +11,7 @@ p class="question-body" = question.body
         = form.label :body
         = form.text_field :body
       p = form.submit
-    button id='edit-button'
+    button id='edit-question-button'
       | Edit question
     = button_to 'Delete question', question_path(question), method: :delete
 

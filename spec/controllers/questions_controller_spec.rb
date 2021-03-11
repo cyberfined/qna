@@ -99,7 +99,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         context 'with valid attributes' do
           before do
-            post :update, params: { id: question.id, question: valid_question.attributes, format: :js}
+            post :update, params: { id: question.id, question: valid_question.attributes, format: :js }
           end
 
           it 'updates question' do
@@ -115,7 +115,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         context 'with invalid attributes' do
           before do
-            post :update, params: { id: question.id, question: invalid_question.attributes, format: :js}
+            post :update, params: { id: question.id, question: invalid_question.attributes, format: :js }
           end
 
           it 'tries to update question' do
@@ -149,7 +149,7 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:user).questions.create!(attributes_for(:question)) }
 
       it "tries to edit another user's question" do
-        post :update, params: { id: question.id, question: attributes_for(:question), format: :js}
+        post :update, params: { id: question.id, question: attributes_for(:question), format: :js }
         expect { question.reload }.to_not change { question }
       end
     end

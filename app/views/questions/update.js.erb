@@ -2,6 +2,6 @@ document.querySelector('.question-errors').innerHTML = "<%= render partial: 'sha
 <% unless question.errors.present? %>
     document.querySelector(".question-header").innerHTML = "<%= j question.title %>";
     document.querySelector(".question-body").innerHTML = "<%= j question.body %>";
-    document.querySelector("#edit-form").classList.add("hide");
-    document.querySelector("#edit-button").classList.remove("hide");
+    document.querySelector("#edit-question-form").classList.add("hide");
+    document.querySelector("#edit-question-button").classList.remove("hide");
 <% end %>
