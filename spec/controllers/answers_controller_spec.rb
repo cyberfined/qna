@@ -9,26 +9,26 @@ RSpec.describe AnswersController, type: :controller do
       context 'with valid attributes' do
         it 'creates new answer in the database' do
           expect {
-            post :create, params: { answer: attributes_for(:answer), question_id: question.id }
+            post :create, params: { answer: attributes_for(:answer), question_id: question.id, format: :js }
           }.to change { question.answers.count }.by(1)
         end
 
-        it 'redirects to show view' do
-            post :create, params: { answer: attributes_for(:answer), question_id: question.id }
-            expect(response).to redirect_to controller.answer.question
+        it 'renders create template' do
+          post :create, params: { answer: attributes_for(:answer), question_id: question.id, format: :js}
+          expect(response).to render_template :create
         end
       end
 
       context 'with invalid attributes' do
         it "doesn't create invalid answer" do
           expect {
-            post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
+            post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, format: :js}
           }.to_not change { question.answers.count }
         end
 
-        it 're-renders question show view' do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
-          expect(response).to render_template 'questions/show'
+        it 'renders create template' do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, format: :js}
+          expect(response).to render_template :create
         end
       end
     end
