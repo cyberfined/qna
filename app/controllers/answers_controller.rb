@@ -13,7 +13,6 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(answer)
       answer.destroy
-      redirect_to answer.question, notice: 'You successfully delete the answer'
     else
       render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
     end

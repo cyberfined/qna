@@ -1,4 +1,4 @@
-div
+= content_tag :div, data: { id: answer.id }, class: "answer"
   p =answer.body
   - if current_user&.author_of?(answer)
-    p = button_to 'Delete answer', answer_path(answer), method: :delete
+    = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete

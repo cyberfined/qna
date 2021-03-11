@@ -54,13 +54,13 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'deletes answer from the database' do
           expect {
-            delete :destroy, params: { id: answer.id }
+            delete :destroy, params: { id: answer.id, format: :js }
           }.to change { Answer.count }.by(-1)
         end
 
-        it 'redirects to question' do
-          delete :destroy, params: { id: answer.id }
-          expect(response).to redirect_to question
+        it 'renders destroy template' do
+          delete :destroy, params: { id: answer.id, format: :js }
+          expect(response).to render_template 'destroy'
         end
       end
 
@@ -70,12 +70,12 @@ RSpec.describe AnswersController, type: :controller do
 
         it "tries to delete another user's answer" do
           expect {
-            delete :destroy, params: { id: another_answer.id }
+            delete :destroy, params: { id: another_answer.id, format: :js }
           }.to_not change { Answer.count }
         end
 
         it 'returns an unauthorized error' do
-          delete :destroy, params: { id: another_answer.id }
+          delete :destroy, params: { id: another_answer.id, format: :js }
           expect(response).to have_http_status(:forbidden)
         end
       end
