@@ -24,8 +24,6 @@ RSpec.feature 'User can edit his question', %q{
             expect(page).to have_no_field 'question[title]'
             expect(page).to have_no_field 'question[body]'
             expect(page).to have_no_button 'Update question'
-          else
-            nil
           end
         end
       end
@@ -38,8 +36,6 @@ RSpec.feature 'User can edit his question', %q{
             fill_in 'question[title]', with: new_question.title
             fill_in 'question[body]', with: new_question.body
             click_on 'Update question'
-          else
-            nil
           end
         end
       end
@@ -57,8 +53,6 @@ RSpec.feature 'User can edit his question', %q{
             expect(page).to have_no_content question.body
             expect(page).to have_content new_question.title
             expect(page).to have_content new_question.body
-          else
-            nil
           end
         end
       end
@@ -69,8 +63,6 @@ RSpec.feature 'User can edit his question', %q{
         page.document.synchronize seconds=20 do
           if page.has_content? "Title can't be blank"
             expect(page).to have_content "Title can't be blank"
-          else
-            nil
           end
         end
       end
@@ -81,8 +73,6 @@ RSpec.feature 'User can edit his question', %q{
         page.document.synchronize seconds=20 do
           if page.has_content? "Body can't be blank"
             expect(page).to have_content "Body can't be blank"
-          else
-            nil
           end
         end
       end

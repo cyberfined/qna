@@ -24,8 +24,6 @@ RSpec.feature 'User can edit his answer', %q{
               expect(page).to have_no_field 'answer[body]'
               expect(page).to have_no_button 'Update answer'
             end
-          else
-            nil
           end
         end
 
@@ -36,8 +34,6 @@ RSpec.feature 'User can edit his answer', %q{
           page.document.synchronize seconds=20 do
             if page.has_content? answer.body
               expect(page).to have_content answer.body
-            else
-              nil
             end
           end
         end
@@ -51,8 +47,6 @@ RSpec.feature 'User can edit his answer', %q{
             if page.has_field? 'answer[body]'
               fill_in 'answer[body]', with: new_answer.body
               click_on 'Update answer'
-            else
-              nil
             end
           end
         end
@@ -69,8 +63,6 @@ RSpec.feature 'User can edit his answer', %q{
                 expect(page).to have_button 'Edit answer'
                 expect(page).to have_no_content answer.body
                 expect(page).to have_content new_valid_answer.body
-            else
-              nil
             end
           end
         end
@@ -82,8 +74,6 @@ RSpec.feature 'User can edit his answer', %q{
         page.document.synchronize seconds=20 do
           if page.has_content? "Body can't be blank"
             expect(page).to have_content "Body can't be blank"
-          else
-            nil
           end
         end
       end
