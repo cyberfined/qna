@@ -1,0 +1,8 @@
+.answer {
+    display: table;
+    border: 1px solid transparent;
+}
+
+.best-answer {
+    border: 1px solid green;
+}

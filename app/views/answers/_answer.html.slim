@@ -1,4 +1,4 @@
-= content_tag :div, data: { id: answer.id }, class: 'answer'
+= answer_container(answer)
   p =answer.body
   - if current_user&.author_of?(answer)
     = form_with model: answer, local: false, class: 'edit-answer-form hide', data: { id: answer.id } do |form|
@@ -6,5 +6,6 @@
         = form.label :body
         = form.text_field :body
       p = form.submit 'Update answer'
+    = mark_answer_best_button(answer)
     = content_tag :button, 'Edit answer', onclick: 'editAnswerButtonHandler(this)', class: 'edit-answer-button', data: { id: answer.id }
     = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete

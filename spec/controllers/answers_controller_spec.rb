@@ -163,4 +163,79 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #mark_best' do
+    context 'when user is authenticated' do
+      let!(:user) { create(:user) }
+
+      before { sign_in(user) }
+
+      context 'authorized actions' do
+        let!(:question) { user.questions.create!(attributes_for(:question)) }
+        let!(:answers) { create_list(:answer, 2, question: question, user: user) }
+        let(:another_question) { create(:question, user: user) }
+        let(:another_answer) { another_question.answers.create!(attributes_for(:answer, user: user)) }
+
+        it 'marks the best answer' do
+          post :mark_best, params: { id: answers.first.id, format: :js }
+          answers.each(&:reload)
+          expect(answers.first.best).to be true
+          expect(answers.second.best).to be false
+        end
+
+        it 'changes the best answer' do
+          answers.first.update!(best: true)
+          post :mark_best, params: { id: answers.second.id, format: :js }
+          answers.each(&:reload)
+          expect(answers.first.best).to be false
+          expect(answers.second.best).to be true
+        end
+
+        it "tries to mark best answer that doesn't belong to the question" do
+          answers.first.update!(best: true)
+          post :mark_best, params: { id: another_answer.id, format: :js }
+          answers.each(&:reload)
+          expect(answers.first.best).to be true
+          expect(answers.second.best).to be false
+          expect(another_answer.best).to be false
+        end
+
+        it 'renders mark_best template' do
+          post :mark_best, params: { id: another_answer.id, format: :js }
+          expect(response).to render_template 'mark_best'
+        end
+      end
+
+      context 'unauthorized actions' do
+        let!(:another_user) { create(:user) }
+        let!(:question) { another_user.questions.create!(attributes_for(:question)) }
+        let!(:answer) { question.answers.create!(attributes_for(:answer, user: another_user)) }
+
+        before do
+          post :mark_best, params: { id: answer.id, format: :js }
+        end
+
+        it 'tries to mark the best answer' do
+          answer.reload
+          expect(answer.best).to be false
+        end
+
+        it 'returns an unauthorized error' do
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context 'when user is unauthenticated' do
+      let!(:user) { create(:user) }
+      let!(:question) { user.questions.create!(attributes_for(:question)) }
+      let!(:answer) { question.answers.create!(attributes_for(:answer, user: user)) }
+
+      it 'tries to mark the best answer' do
+        post :mark_best, params: { id: answer.id, format: :js }
+        answer.reload
+        expect(answer.best).to be false
+      end
+    end
+  end
 end

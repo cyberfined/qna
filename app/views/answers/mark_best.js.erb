@@ -1,0 +1,17 @@
+(function() {
+  const answers = document.querySelector(".answers");
+  const answer = answers.querySelector(".answer[data-id='<%= answer.id %>']");
+  const markButton = answer.querySelector(".mark-best-answer-btn");
+  const bestAnswer = answers.querySelector(".best-answer");
+
+  if(bestAnswer !== null) {
+    bestAnswer.querySelector(".mark-best-answer-btn").classList.remove("hide");
+    bestAnswer.classList.remove("best-answer");
+  }
+
+  answer.classList.add("best-answer");
+  markButton.classList.add("hide");
+
+  answer.remove();
+  answers.prepend(answer);
+}());

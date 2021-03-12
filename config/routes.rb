@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :questions, except: :edit do
-    resources :answers, only: %i[create update destroy], shallow: true
+    resources :answers, only: %i[create update destroy], shallow: true do
+      member do
+        post :mark_best
+      end
+    end
   end
 end
