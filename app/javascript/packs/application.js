@@ -8,6 +8,11 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
+require("packs/edit_question")
+
+const editAnswer = require("packs/edit_answer")
+global.editAnswerButtonHandler = editAnswer.editAnswerButtonHandler
+
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

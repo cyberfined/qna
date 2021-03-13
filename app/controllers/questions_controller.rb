@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create destroy]
+  before_action :authenticate_user!, only: %i[new create update destroy]
 
   expose :questions, ->{ Question.all }
   expose :question
@@ -11,6 +11,14 @@ class QuestionsController < ApplicationController
       redirect_to question, notice: 'You have succesfully create a question'
     else
       render :new
+    end
+  end
+
+  def update
+    if current_user.author_of?(question)
+      question.update(question_params)
+    else
+      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
     end
   end
 

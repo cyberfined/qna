@@ -25,6 +25,7 @@ RSpec.feature 'User can ask a question', %q{
       ask_question(question)
 
       expect(page).to have_content 'You have succesfully create a question'
+      expect(page).to have_content question.title
     end
 
     scenario 'tries to ask question with a blank title' do

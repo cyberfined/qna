@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :answer do
     user { nil }
     question { nil }
+    best { false }
     body { generate :answer_body }
 
     trait :bodyless do

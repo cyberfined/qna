@@ -11,7 +11,7 @@ RSpec.feature 'User can give answer to a question', %q{
     click_on 'Answer'
   end
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:answer) { build(:answer) }
     given(:bodyless_answer) { build(:answer, :bodyless) }
 
@@ -23,7 +23,9 @@ RSpec.feature 'User can give answer to a question', %q{
     scenario 'answers to the question' do
       post_answer(answer)
 
-      expect(page).to have_content 'You have successfully post an answer'
+      within '.answers' do
+        expect(page).to have_content answer.body
+      end
     end
 
     scenario 'tries to create answer with blank body' do

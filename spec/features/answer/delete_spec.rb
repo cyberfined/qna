@@ -9,13 +9,12 @@ RSpec.feature 'User can delete his answer', %q{
   describe 'Authenticated user' do
     background { sign_in(user) }
 
-    scenario 'deletes his answer' do
+    scenario 'deletes his answer', js: true do
       answer = question.answers.create!(attributes_for(:answer, user: user))
       visit questions_path
       click_on question.title
       click_on 'Delete answer'
 
-      expect(page).to have_content 'You successfully delete the answer'
       expect(page).to have_no_content answer.body
     end
 

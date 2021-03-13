@@ -1,0 +1,5 @@
+document.querySelector(".answer-errors").innerHTML = "<%= render partial: 'shared/errors', locals: { resource: answer } %>";
+<% if answer.persisted? %>
+    document.querySelector(".answers").innerHTML += "<%= j render answer %>";
+    document.querySelector("#answer_body").value = '';
+<% end %>
