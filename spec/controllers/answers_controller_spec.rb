@@ -179,25 +179,25 @@ RSpec.describe AnswersController, type: :controller do
         it 'marks the best answer' do
           post :mark_best, params: { id: answers.first.id, format: :js }
           answers.each(&:reload)
-          expect(answers.first.best).to be true
-          expect(answers.second.best).to be false
+          expect(answers.first).to be_best
+          expect(answers.second).to_not be_best
         end
 
         it 'changes the best answer' do
           answers.first.update!(best: true)
           post :mark_best, params: { id: answers.second.id, format: :js }
           answers.each(&:reload)
-          expect(answers.first.best).to be false
-          expect(answers.second.best).to be true
+          expect(answers.first).to_not be_best
+          expect(answers.second).to be_best
         end
 
         it "tries to mark best answer that doesn't belong to the question" do
           answers.first.update!(best: true)
           post :mark_best, params: { id: another_answer.id, format: :js }
           answers.each(&:reload)
-          expect(answers.first.best).to be true
-          expect(answers.second.best).to be false
-          expect(another_answer.best).to be false
+          expect(answers.first).to be_best
+          expect(answers.second).to_not be_best
+          expect(another_answer).to_not be_best
         end
 
         it 'renders mark_best template' do
@@ -217,7 +217,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'tries to mark the best answer' do
           answer.reload
-          expect(answer.best).to be false
+          expect(answer).to_not be_best
         end
 
         it 'returns an unauthorized error' do
@@ -234,7 +234,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'tries to mark the best answer' do
         post :mark_best, params: { id: answer.id, format: :js }
         answer.reload
-        expect(answer.best).to be false
+        expect(answer).to_not be_best
       end
     end
   end

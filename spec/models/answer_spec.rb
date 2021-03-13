@@ -30,16 +30,16 @@ RSpec.describe Answer, type: :model do
 
     it 'sets first answer as the best' do
       answers.first.mark_best!
-      expect(answers.first.best).to be true
-      expect(answers.second.best).to be false
+      expect(answers.first).to be_best
+      expect(answers.second).to_not be_best
     end
 
     it 'changes the best answer from first to the second one' do
       answers.first.update!(best: true)
       answers.second.mark_best!
       answers.each(&:reload)
-      expect(answers.first.best).to be false
-      expect(answers.second.best).to be true
+      expect(answers.first).to_not be_best
+      expect(answers.second).to be_best
     end
   end
 end
