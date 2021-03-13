@@ -8,8 +8,10 @@ class Answer < ApplicationRecord
   scope :best_first, -> { order(best: :desc) }
 
   def mark_best!
-    question.best_answer&.update!(best: false)
-    update!(best: true)
+    Answer.transaction do
+      question.best_answer&.update!(best: false)
+      update!(best: true)
+    end
   end
 
   private
