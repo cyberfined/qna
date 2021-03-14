@@ -10,4 +10,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  delete '/attachments/:id', to: 'attachments#destroy', as: 'attachment'
 end
