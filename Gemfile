@@ -37,6 +37,9 @@ gem 'slim'
 # Devise for authentication
 gem 'devise'
 
+# Gem to work with azure
+gem "azure-storage-blob", require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
