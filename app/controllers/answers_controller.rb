@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy mark_best]
 
-  expose :answer
+  expose :answer, scope: -> { Answer.with_attached_files }
   expose :question
 
   def create
@@ -37,6 +37,6 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 end

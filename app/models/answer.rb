@@ -7,6 +7,8 @@ class Answer < ApplicationRecord
 
   scope :best_first, -> { order(best: :desc) }
 
+  has_many_attached :files
+
   def mark_best!
     Answer.transaction do
       question.best_answer&.update!(best: false)
