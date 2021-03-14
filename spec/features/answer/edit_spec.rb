@@ -18,64 +18,55 @@ RSpec.feature 'User can edit his answer', %q{
         visit questions_path
         click_on question.title
 
-        page.document.synchronize seconds=20 do
-          if page.has_css? '.answers'
-            within '.answers' do
-              expect(page).to have_no_field 'answer[body]'
-              expect(page).to have_no_button 'Update answer'
-            end
-          end
-        end
-
         fill_in 'answer[body]', with: answer.body
         click_on 'Answer'
+      end
+
+      def edit_answer(new_answer, files=[])
+        click_on 'Edit answer'
 
         within '.answers' do
-          page.document.synchronize seconds=20 do
-            if page.has_content? answer.body
-              expect(page).to have_content answer.body
-            end
-          end
+          fill_in 'answer[body]', with: new_answer.body
+          attach_file 'answer[files][]', files unless files.empty?
+          click_on 'Update answer'
         end
       end
 
-      def edit_answer(new_answer)
-        click_on 'Edit answer'
-
-        page.document.synchronize do
-          within '.answers' do
-            if page.has_field? 'answer[body]'
-              fill_in 'answer[body]', with: new_answer.body
-              click_on 'Update answer'
-            end
-          end
-        end
+      def have_no_form
+        expect(page).to have_no_field 'answer[body]'
+        expect(page).to have_no_field 'answer[files][]'
+        expect(page).to have_no_button 'Update answer'
+        expect(page).to have_button 'Edit answer'
       end
 
       scenario 'without errors' do
         edit_answer(new_valid_answer)
 
         within '.answers' do
-          page.document.synchronize seconds=20 do
-            if page.has_no_field? 'answer[body]'
-                expect(page).to have_no_field 'answer[body]'
-                expect(page).to have_no_button 'Update answer'
-                expect(page).to have_button 'Edit answer'
-                expect(page).to have_no_content answer.body
-                expect(page).to have_content new_valid_answer.body
-            end
-          end
+          have_no_form
+          expect(page).to have_no_content answer.body
+          expect(page).to have_content new_valid_answer.body
+        end
+      end
+
+      scenario 'without errors and with files attachment' do
+        files = [ Rails.root.join(Rails.public_path, '403.html'),
+                  Rails.root.join(Rails.public_path, '404.html') ]
+        edit_answer(new_valid_answer, files)
+
+        within '.answers' do
+          have_no_form
+          expect(page).to have_no_content answer.body
+          expect(page).to have_content new_valid_answer.body
+          expect(page).to have_link '403.html'
+          expect(page).to have_link '404.html'
         end
       end
 
       scenario 'with blank body' do
         edit_answer(new_bodyless_answer)
 
-        page.document.synchronize seconds=20 do
-          if page.has_content? "Body can't be blank"
-            expect(page).to have_content "Body can't be blank"
-          end
-        end
+        expect(page).to have_content "Body can't be blank"
       end
     end
 

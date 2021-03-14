@@ -1,8 +1,7 @@
 = answer_container(answer)
   p =answer.body
   .answer-files
-    - answer.files.each do |file|
-      p = link_to file.filename.to_s, url_for(file)
+    = render 'shared/file_links', files: answer.files
   - if current_user&.author_of?(answer)
     = form_with model: answer, local: false, class: 'edit-answer-form hide', data: { id: answer.id } do |form|
       = render 'form', form: form
