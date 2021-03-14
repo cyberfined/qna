@@ -1,20 +1,14 @@
 h1 class="question-header" = question.title
 p class="question-body" = question.body
 .question-files
-  - if question.files.attached?
-    - question.files.each do |file|
-      p = link_to file.filename.to_s, url_for(file)
+  - question.files.each do |file|
+    p = link_to file.filename.to_s, url_for(file)
 - if user_signed_in?
   - if current_user.author_of?(question)
     .question-errors
     = form_with model: question, local: false, class: 'hide', id: 'edit-question-form' do |form|
-      p
-        = form.label :title
-        = form.text_field :title
-      p
-        = form.label :body
-        = form.text_field :body
-      p = form.submit
+      = render 'form', form: form
+      p = form.submit 'Update question'
     button id='edit-question-button'
       | Edit question
     = button_to 'Delete question', question_path(question), method: :delete
@@ -22,9 +16,7 @@ p class="question-body" = question.body
   .answer-errors
 
   = form_with model: [question, answer], local: false do |form|
-    p
-      = form.label :body
-      = form.text_field :body
+    = render 'answers/form', form: form
     p = form.submit 'Answer'
 
 h2 Answers

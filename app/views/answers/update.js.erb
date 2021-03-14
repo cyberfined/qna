@@ -1,4 +1,4 @@
-document.querySelector('.answer-errors').innerHTML = "<%= render partial: 'shared/errors', locals: { resource: answer } %>";
+document.querySelector('.answer-errors').innerHTML = "<%= render 'shared/errors', resource: answer %>";
 <% unless answer.errors.present? %>
     document.querySelector(".edit-answer-form[data-id='<%= answer.id %>']").classList.add("hide");
     document.querySelector(".edit-answer-button[data-id='<%= answer.id %>']").classList.remove("hide");

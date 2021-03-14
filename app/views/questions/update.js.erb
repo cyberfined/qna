@@ -1,4 +1,4 @@
-document.querySelector('.question-errors').innerHTML = "<%= render partial: 'shared/errors', locals: { resource: question } %>";
+document.querySelector('.question-errors').innerHTML = "<%= render 'shared/errors', resource: question %>";
 <% unless question.errors.present? %>
     document.querySelector(".question-header").innerHTML = "<%= j question.title %>";
     document.querySelector(".question-body").innerHTML = "<%= j question.body %>";
