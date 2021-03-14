@@ -5,6 +5,7 @@ RSpec.feature 'User can delete attachment from his question', %q{
 } do
   describe 'Authenticated user' do
     given!(:user) { create(:user) }
+    given(:another_user) { create(:user) }
 
     background { sign_in(user) }
 
@@ -23,7 +24,6 @@ RSpec.feature 'User can delete attachment from his question', %q{
     end
 
     scenario "tries to remove an attachment from another user's question" do
-      another_user = create(:user)
       question = another_user.questions.create!(attributes_for(:question))
       question.files.attach(io: File.open(Rails.root.join(Rails.public_path, '403.html')),
                             filename: '403.html')
@@ -39,12 +39,12 @@ RSpec.feature 'User can delete attachment from his question', %q{
   end
 
   describe 'Unauthenticated user' do
+    given!(:user) { create(:user) }
+    given!(:question) { user.questions.create!(attributes_for(:question)) }
+
     scenario 'tries to remove an attachment' do
-      user = create(:user)
-      question = user.questions.create!(attributes_for(:question))
       question.files.attach(io: File.open(Rails.root.join(Rails.public_path, '403.html')),
                             filename: '403.html')
-
       visit questions_path
       click_on question.title
 
