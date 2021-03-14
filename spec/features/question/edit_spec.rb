@@ -48,7 +48,18 @@ RSpec.feature 'User can edit his question', %q{
         expect(page).to have_content new_valid_question.body
       end
 
-      scenario 'without errors and with files attachments' do
+      scenario 'without errors and with files attachment' do
+        files = [ Rails.root.join(Rails.public_path, '403.html'),
+                  Rails.root.join(Rails.public_path, '404.html') ]
+        edit_question(new_valid_question, files)
+
+        have_no_edit_form
+        expect(page).to have_no_content question.title
+        expect(page).to have_no_content question.body
+        expect(page).to have_content new_valid_question.title
+        expect(page).to have_content new_valid_question.body
+        expect(page).to have_link '403.html'
+        expect(page).to have_link '404.html'
       end
 
       scenario 'with blank title' do

@@ -1,8 +1,7 @@
 h1 class="question-header" = question.title
 p class="question-body" = question.body
 .question-files
-  - question.files.each do |file|
-    p = link_to file.filename.to_s, url_for(file)
+  = render 'shared/file_links', files: question.files
 - if user_signed_in?
   - if current_user.author_of?(question)
     .question-errors
