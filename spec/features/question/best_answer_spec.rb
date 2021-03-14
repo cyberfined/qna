@@ -28,9 +28,7 @@ RSpec.feature 'User can select the best answer to his question', %q{
         within answer_selector do
           click_on 'Mark best'
 
-          page.document.synchronize seconds=20 do
-            expect(page).to have_no_button 'Mark best'
-          end
+          expect(page).to have_no_button 'Mark best'
         end
 
         expect(page.find('.best-answer'))

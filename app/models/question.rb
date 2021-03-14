@@ -5,6 +5,8 @@ class Question < ApplicationRecord
   validates :title, presence: true
   validates :body, presence: true
 
+  has_many_attached :files
+
   def best_answer
     answers.find_by(best: true)
   end

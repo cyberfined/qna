@@ -15,9 +15,10 @@ RSpec.feature 'User can ask a question', %q{
       click_on 'Ask question'
     end
 
-    def ask_question(question)
+    def ask_question(question, files=[])
       fill_in 'Title', with: question.title
       fill_in 'Body', with: question.body
+      attach_file 'Files', files unless files.empty?
       click_on 'Ask'
     end
 
@@ -26,6 +27,17 @@ RSpec.feature 'User can ask a question', %q{
 
       expect(page).to have_content 'You have succesfully create a question'
       expect(page).to have_content question.title
+    end
+
+    scenario 'asks a question with attached files' do
+      files = [ Rails.root.join(Rails.public_path, '403.html'),
+                Rails.root.join(Rails.public_path, '404.html') ]
+      ask_question(question, files)
+
+      expect(page).to have_content 'You have succesfully create a question'
+      expect(page).to have_content question.title
+      expect(page).to have_link '403.html'
+      expect(page).to have_link '404.html'
     end
 
     scenario 'tries to ask question with a blank title' do
