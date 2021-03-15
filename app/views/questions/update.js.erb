@@ -1,7 +1,8 @@
-document.querySelector('.question-errors').innerHTML = "<%= render partial: 'shared/errors', locals: { resource: question } %>";
+document.querySelector('.question-errors').innerHTML = "<%= render 'shared/errors', resource: question %>";
 <% unless question.errors.present? %>
     document.querySelector(".question-header").innerHTML = "<%= j question.title %>";
     document.querySelector(".question-body").innerHTML = "<%= j question.body %>";
+    document.querySelector(".question-files").innerHTML = "<%= j render 'shared/file_links', files: question.files %>";
     document.querySelector("#edit-question-form").classList.add("hide");
     document.querySelector("#edit-question-button").classList.remove("hide");
 <% end %>

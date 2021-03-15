@@ -6,8 +6,9 @@ RSpec.feature 'User can give answer to a question', %q{
   given!(:user) { create(:user) }
   given!(:question) { user.questions.create!(attributes_for(:question)) }
 
-  def post_answer(answer)
+  def post_answer(answer, files=[])
     fill_in 'Body', with: answer.body
+    attach_file 'Files', files unless files.empty?
     click_on 'Answer'
   end
 
@@ -25,6 +26,18 @@ RSpec.feature 'User can give answer to a question', %q{
 
       within '.answers' do
         expect(page).to have_content answer.body
+      end
+    end
+
+    scenario 'answers to the question with files attachment' do
+      files = [ Rails.root.join(Rails.public_path, '403.html'),
+                Rails.root.join(Rails.public_path, '404.html') ]
+      post_answer(answer, files)
+
+      within '.answers' do
+        expect(page).to have_content answer.body
+        expect(page).to have_link '403.html'
+        expect(page).to have_link '404.html'
       end
     end
 

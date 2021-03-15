@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbolinks:load", () => {
     const editButton = document.querySelector("#edit-question-button");
     if(editButton === null)
         return;

@@ -15,66 +15,65 @@ RSpec.feature 'User can edit his question', %q{
     context 'edits his question', js: true do
       given!(:question) { user.questions.create!(attributes_for(:question)) }
 
-      before do
+      background do
         visit questions_path
         click_on question.title
-
-        page.document.synchronize seconds=20 do
-          if page.has_css? '.question-header'
-            expect(page).to have_no_field 'question[title]'
-            expect(page).to have_no_field 'question[body]'
-            expect(page).to have_no_button 'Update question'
-          end
-        end
+        have_no_edit_form
       end
 
-      def edit_question(new_question)
+      def edit_question(new_question, files=[])
         click_on 'Edit question'
 
-        page.document.synchronize do
-          if page.has_field? 'question[title]'
-            fill_in 'question[title]', with: new_question.title
-            fill_in 'question[body]', with: new_question.body
-            click_on 'Update question'
-          end
-        end
+        fill_in 'question[title]', with: new_question.title
+        fill_in 'question[body]', with: new_question.body
+        attach_file 'question[files][]', files unless files.empty?
+        click_on 'Update question'
       end
 
-      scenario 'with no errors' do
+      def have_no_edit_form
+        expect(page).to have_no_field 'question[title]'
+        expect(page).to have_no_field 'question[body]'
+        expect(page).to have_no_field 'question[files][]'
+        expect(page).to have_no_button 'Update question'
+        expect(page).to have_button 'Edit question'
+      end
+
+      scenario 'without errors' do
         edit_question(new_valid_question)
 
-        page.document.synchronize seconds=20 do
-          if page.has_no_content? question.title
-            expect(page).to have_no_field 'question[title]'
-            expect(page).to have_no_field 'question[body]'
-            expect(page).to have_no_button 'Update question'
-            expect(page).to have_button 'Edit question'
-            expect(page).to have_no_content question.title
-            expect(page).to have_no_content question.body
-            expect(page).to have_content new_question.title
-            expect(page).to have_content new_question.body
-          end
-        end
+        have_no_edit_form
+        expect(page).to have_no_content question.title
+        expect(page).to have_no_content question.body
+        expect(page).to have_content new_valid_question.title
+        expect(page).to have_content new_valid_question.body
       end
 
-      scenario 'with blank title', js: true do
+      scenario 'without errors and with files attachment' do
+        files = [ Rails.root.join(Rails.public_path, '403.html'),
+                  Rails.root.join(Rails.public_path, '404.html') ]
+        edit_question(new_valid_question, files)
+
+        have_no_edit_form
+        expect(page).to have_no_content question.title
+        expect(page).to have_no_content question.body
+        expect(page).to have_content new_valid_question.title
+        expect(page).to have_content new_valid_question.body
+        expect(page).to have_link '403.html'
+        expect(page).to have_link '404.html'
+      end
+
+      scenario 'with blank title' do
         edit_question(new_titleless_question)
 
-        page.document.synchronize seconds=20 do
-          if page.has_content? "Title can't be blank"
-            expect(page).to have_content "Title can't be blank"
-          end
-        end
+        expect(page).to have_content "Title can't be blank"
+        expect(page).to have_no_content "Body can't be blank"
       end
 
-      scenario 'with blank body', js: true do
+      scenario 'with blank body' do
         edit_question(new_bodyless_question)
 
-        page.document.synchronize seconds=20 do
-          if page.has_content? "Body can't be blank"
-            expect(page).to have_content "Body can't be blank"
-          end
-        end
+        expect(page).to have_content "Body can't be blank"
+        expect(page).to have_no_content "Title can't be blank"
       end
     end
 
