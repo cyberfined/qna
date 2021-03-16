@@ -37,6 +37,9 @@ gem 'slim'
 # Devise for authentication
 gem 'devise'
 
+# Cocoon for nested forms
+gem 'cocoon'
+
 # Gem to work with azure
 gem "azure-storage-blob", require: false
 
