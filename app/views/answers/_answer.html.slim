@@ -1,5 +1,7 @@
 = answer_container(answer)
   p =answer.body
+  .answer-links
+    = render answer.links
   .answer-files
     = render 'shared/file_links', files: answer.files
   - if current_user&.author_of?(answer)

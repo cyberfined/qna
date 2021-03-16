@@ -17,9 +17,10 @@ h3 Files
   h3 Create answer
   .answer-errors
 
-  = form_with model: [question, answer], local: false do |form|
-    = render 'answers/form', form: form
-    p = form.submit 'Answer'
+  .create-answer-form
+    = form_with model: [question, answer], local: false do |form|
+      = render 'answers/form', form: form
+      p = form.submit 'Answer'
 
 h2 Answers
 .answers

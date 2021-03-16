@@ -4,3 +4,8 @@ p
 p
   = form.label :files
   = form.file_field :files, multiple: true, direct_upload: true
+p
+  = form.fields_for :links do |link|
+    = render 'links/form', form: link
+  .answer-links
+    = link_to_add_association 'Add link', form, :links, partial: 'links/form', form_name: 'form'

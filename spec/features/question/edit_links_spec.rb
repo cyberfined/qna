@@ -17,10 +17,10 @@ RSpec.feature 'User can edit links attached to his question', %q{
       visit questions_path
       click_on question.title
       click_on 'Edit question'
-      click_on 'Add link'
-      fill_in 'Link title', with: link.title
-      fill_in 'Link url', with: link.url
-      click_on 'Update question'
+      within '#edit-question-form' do
+        click_on 'Add link'
+      end
+      attach_link(link)
       click_on 'Edit question'
     end
 
@@ -50,7 +50,9 @@ RSpec.feature 'User can edit links attached to his question', %q{
     end
 
     scenario 'attaches a new link' do
-      click_on 'Add link'
+      within '#edit-question-form' do
+        click_on 'Add link'
+      end
       attach_link(new_valid_link)
 
       expect(page).to have_link link.title
