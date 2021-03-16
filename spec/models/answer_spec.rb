@@ -2,6 +2,7 @@ RSpec.describe Answer, type: :model do
   describe 'associations' do
     it { should belong_to(:user) }
     it { should belong_to(:question) }
+    it { should have_many(:links).dependent(:destroy) }
   end
 
   describe 'validations' do

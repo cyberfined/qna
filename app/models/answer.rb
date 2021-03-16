@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
+  has_many :links, dependent: :destroy, as: :linkable
 
   validates :body, presence: true
   validate :validate_best_answers, if: :best
@@ -8,6 +9,8 @@ class Answer < ApplicationRecord
   scope :best_first, -> { order(best: :desc) }
 
   has_many_attached :files
+
+  accepts_nested_attributes_for :links, reject_if: :all_blank
 
   def mark_best!
     Answer.transaction do

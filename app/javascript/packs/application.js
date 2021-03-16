@@ -8,6 +8,9 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
+const jquery = require("jquery")
+global.jQuery = jquery;
+require("@nathanvda/cocoon")
 require("packs/edit_question")
 
 const editAnswer = require("packs/edit_answer")

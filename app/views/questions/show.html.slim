@@ -1,6 +1,10 @@
 h1 class="question-header" = question.title
 p class="question-body" = question.body
+.question-links
+  h3 Links
+  = render question.links
 .question-files
+  h3 Files
   = render 'shared/file_links', files: question.files
 - if user_signed_in?
   - if current_user.author_of?(question)
@@ -12,6 +16,7 @@ p class="question-body" = question.body
       | Edit question
     = button_to 'Delete question', question_path(question), method: :delete
 
+  h3 Create answer
   .answer-errors
 
   = form_with model: [question, answer], local: false do |form|
