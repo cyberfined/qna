@@ -40,6 +40,9 @@ gem 'devise'
 # Cocoon for nested forms
 gem 'cocoon'
 
+# Octokit for fetching gists content
+gem "octokit", "~> 4.0"
+
 # Gem to work with azure
 gem "azure-storage-blob", require: false
 
