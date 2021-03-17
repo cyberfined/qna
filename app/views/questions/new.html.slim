@@ -2,4 +2,11 @@ h1 Ask a question
 = render 'shared/errors', resource: question
 = form_with model: question, local: true do |form|
   = render 'form', form: form
+  = form.fields_for :reward, Reward.new do |r|
+    p
+      = r.label :title, 'Reward title'
+      = r.text_field :title
+    p
+      = r.label :picture, 'Reward picture'
+      = r.file_field :picture, direct_upload: true
   p = form.submit 'Ask'

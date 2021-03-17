@@ -4,8 +4,9 @@
     = render answer.links
   .answer-files
     = render 'shared/file_links', files: answer.files
+  - if current_user&.author_of?(answer.question)
+    = mark_answer_best_button(answer)
   - if current_user&.author_of?(answer)
     = render 'answers/update_form', answer: answer
-    = mark_answer_best_button(answer)
     = content_tag :button, 'Edit answer', onclick: 'editAnswerButtonHandler(this)', class: 'edit-answer-button', data: { id: answer.id }
     = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete

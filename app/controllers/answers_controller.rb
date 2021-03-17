@@ -27,7 +27,7 @@ class AnswersController < ApplicationController
   end
 
   def mark_best
-    if current_user.author_of?(answer)
+    if current_user.author_of?(answer.question)
       answer.mark_best!
     else
       render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden

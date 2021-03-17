@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   end
 
   delete '/attachments/:id', to: 'attachments#destroy', as: 'attachment'
+  get '/rewards', to: 'rewards#index', as: 'rewards'
 end
