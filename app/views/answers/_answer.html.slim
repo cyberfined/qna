@@ -1,11 +1,12 @@
 = answer_container(answer)
   p =answer.body
+  .answer-links
+    = render answer.links
   .answer-files
     = render 'shared/file_links', files: answer.files
-  - if current_user&.author_of?(answer)
-    = form_with model: answer, local: false, class: 'edit-answer-form hide', data: { id: answer.id } do |form|
-      = render 'form', form: form
-      p = form.submit 'Update answer'
+  - if current_user&.author_of?(answer.question)
     = mark_answer_best_button(answer)
+  - if current_user&.author_of?(answer)
+    = render 'answers/update_form', answer: answer
     = content_tag :button, 'Edit answer', onclick: 'editAnswerButtonHandler(this)', class: 'edit-answer-button', data: { id: answer.id }
     = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete

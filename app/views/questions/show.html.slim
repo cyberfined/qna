@@ -1,22 +1,26 @@
 h1 class="question-header" = question.title
 p class="question-body" = question.body
+h3 Links
+.question-links
+  = render question.links
+h3 Files
 .question-files
   = render 'shared/file_links', files: question.files
 - if user_signed_in?
   - if current_user.author_of?(question)
     .question-errors
-    = form_with model: question, local: false, class: 'hide', id: 'edit-question-form' do |form|
-      = render 'form', form: form
-      p = form.submit 'Update question'
+    = render 'update_form'
     button id='edit-question-button'
       | Edit question
     = button_to 'Delete question', question_path(question), method: :delete
 
+  h3 Create answer
   .answer-errors
 
-  = form_with model: [question, answer], local: false do |form|
-    = render 'answers/form', form: form
-    p = form.submit 'Answer'
+  .create-answer-form
+    = form_with model: [question, answer], local: false do |form|
+      = render 'answers/form', form: form
+      p = form.submit 'Answer'
 
 h2 Answers
 .answers

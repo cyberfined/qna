@@ -1,0 +1,4 @@
+- if link.gist?
+  = render partial: 'links/gist', collection: link.gist_content
+- else
+  p = link_to link.title, link.url, rel: :nofollow, target: :blank

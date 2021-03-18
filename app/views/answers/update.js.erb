@@ -1,8 +1,13 @@
-document.querySelector('.answer-errors').innerHTML = "<%= render 'shared/errors', resource: answer %>";
-<% unless answer.errors.present? %>
-    document.querySelector(".edit-answer-form[data-id='<%= answer.id %>']").classList.add("hide");
+(function() {
+  document.querySelector('.answer-errors').innerHTML = "<%= render 'shared/errors', resource: answer %>";
+  <% unless answer.errors.present? %>
+    const form = document.querySelector(".edit-answer-form[data-id='<%= answer.id %>']");
+    const answer = document.querySelector(".answer[data-id='<%= answer.id %>']");
+    form.outerHTML = "<%= j render 'update_form' %>";
+    form.classList.add("hide");
     document.querySelector(".edit-answer-button[data-id='<%= answer.id %>']").classList.remove("hide");
-    document.querySelector(".answer[data-id='<%= answer.id %>'] p").innerHTML = "<%= j answer.body %>";
-    document.querySelector(".answer[data-id='<%= answer.id %>'] .answer-files").innerHTML =
-        "<%= j render 'shared/file_links', files: answer.files %>";
-<% end %>
+    answer.querySelector("p").innerHTML = "<%= j answer.body %>";
+    answer.querySelector(".answer-links").innerHTML = "<%= j render answer.links %>";
+    answer.querySelector(".answer-files").innerHTML = "<%= j render 'shared/file_links', files: answer.files %>";
+  <% end %>
+}());

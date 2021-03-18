@@ -1,0 +1,11 @@
+.gist {
+    border: 1px black solid;
+    margin-bottom: 1px;
+    padding: 5px;
+    display: table;
+}
+
+.gist p:first-child {
+    text-align: center;
+    font-weight: bold;
+}
