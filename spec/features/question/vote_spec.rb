@@ -1,4 +1,4 @@
-RSpec.feature "User can vote for otr against another user's question", %q{
+RSpec.feature "User can vote for or against another user's question", %q{
   In order to show my approval or disapproval to a question
   As an authenticated user
   I'd like to vote for or against it
@@ -84,7 +84,7 @@ RSpec.feature "User can vote for otr against another user's question", %q{
       end
     end
 
-    scenario 'tries to vote for/agains his question' do
+    scenario 'tries to vote for/against his question' do
       question = user.questions.create!(attributes_for(:question))
       visit question_path(question)
 
