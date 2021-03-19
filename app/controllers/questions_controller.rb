@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create update destroy]
+  include Voting
+
+  before_action :authenticate_user!, only: %i[new create update destroy vote_for vote_against]
 
   expose :questions, ->{ Question.all }
   expose :question, scope: -> { Question.with_attached_files }

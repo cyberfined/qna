@@ -1,5 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create update destroy mark_best]
+  include Voting
+
+  before_action :authenticate_user!, only: %i[create update destroy mark_best vote_for vote_against]
 
   expose :answer, scope: -> { Answer.with_attached_files }
   expose :question
