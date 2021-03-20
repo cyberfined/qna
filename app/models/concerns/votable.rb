@@ -19,9 +19,9 @@ module Votable
     private
 
     def vote_new_or_destroy!(user, vote_value)
-      vote = Vote.find_by(votable: self, user: user)
+      vote = votes.find_by(user: user)
       if vote.nil?
-        Vote.create!(vote: vote_value, votable: self, user: user)
+        votes.create!(vote: vote_value, user: user)
       elsif vote.vote != vote_value.to_s
         vote.destroy!
       end
