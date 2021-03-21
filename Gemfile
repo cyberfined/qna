@@ -34,6 +34,9 @@ gem 'decent_exposure', '~> 3.0'
 # Slim template language
 gem 'slim'
 
+# Gon to pass variable from rails to js
+gem 'gon'
+
 # Devise for authentication
 gem 'devise'
 
