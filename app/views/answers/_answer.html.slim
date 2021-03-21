@@ -1,5 +1,6 @@
 = answer_container(answer)
   p =answer.body
+  = render 'shared/vote', votable: answer
   .answer-links
     = render answer.links
   .answer-files

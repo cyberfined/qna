@@ -1,5 +1,7 @@
 h1 class="question-header" = question.title
 p class="question-body" = question.body
+h3 Vote
+= render 'shared/vote', votable: question
 h3 Links
 .question-links
   = render question.links

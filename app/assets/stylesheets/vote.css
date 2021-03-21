@@ -1,0 +1,5 @@
+.vote-form .vote-for[disabled], .vote-form .vote-against[disabled] {
+  color: gray;
+  pointer-events: none;
+  text-decoration: none;
+}

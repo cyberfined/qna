@@ -12,6 +12,7 @@ const jquery = require("jquery")
 global.jQuery = jquery;
 require("@nathanvda/cocoon")
 require("packs/edit_question")
+require("packs/vote")
 
 const editAnswer = require("packs/edit_answer")
 global.editAnswerButtonHandler = editAnswer.editAnswerButtonHandler
