@@ -10,6 +10,12 @@ RSpec.describe QuestionsController, type: :controller do
           }.to change { Question.count }.by(1)
         end
 
+        it 'publish new question to the questions channel' do
+          question = attributes_for(:question)
+          post :create, params: { question: question }
+          assert_broadcast_on('questions', { id: 1, title: question[:title] })
+        end
+
         it 'redirects to show view' do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to controller.question
@@ -21,6 +27,11 @@ RSpec.describe QuestionsController, type: :controller do
           expect {
             post :create, params: { question: attributes_for(:question, :invalid) }
           }.not_to change { Question.count }
+        end
+
+        it "doesn't broadcasr to the questions channel" do
+          post :create, params: { question: attributes_for(:question, :invalid) }
+          assert_no_broadcasts('questions')
         end
 
         it 're-renders new view' do
@@ -35,6 +46,11 @@ RSpec.describe QuestionsController, type: :controller do
         expect {
             post :create, params: { question: attributes_for(:question) }
         }.to_not change { Question.count }
+      end
+
+      it "doesn't broadcasr to the questions channel" do
+        post :create, params: { question: attributes_for(:question, :invalid) }
+        assert_no_broadcasts('questions')
       end
     end
   end
