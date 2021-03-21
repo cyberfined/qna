@@ -1,11 +1,21 @@
 class Vote < ApplicationRecord
-  enum vote: { against: -1, for: 1 }
+  AGAINST = -1
+  FOR = 1
 
   belongs_to :user
   belongs_to :votable, polymorphic: true
 
   validates :user, uniqueness: { scope: :votable }
+  validates :vote, inclusion: { in: [AGAINST, FOR] }
   validate :validate_author_cannot_vote
+
+  def for?
+    vote == FOR
+  end
+  
+  def against?
+    vote == AGAINST
+  end
 
   private
 

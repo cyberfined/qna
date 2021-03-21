@@ -5,15 +5,15 @@ module Votable
     has_many :votes, dependent: :destroy, as: :votable
 
     def vote_for!(user)
-      vote_new_or_destroy!(user, :for)
+      vote_new_or_destroy!(user, Vote::FOR)
     end
 
     def vote_against!(user)
-      vote_new_or_destroy!(user, :against)
+      vote_new_or_destroy!(user, Vote::AGAINST)
     end
 
     def rating
-      votes.inject(0) { |sum,v| sum + Vote.votes[v.vote] }
+      votes.sum(:vote)
     end
 
     private
@@ -22,7 +22,7 @@ module Votable
       vote = votes.find_by(user: user)
       if vote.nil?
         votes.create!(vote: vote_value, user: user)
-      elsif vote.vote != vote_value.to_s
+      elsif vote.vote != vote_value
         vote.destroy!
       end
     end

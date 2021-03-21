@@ -54,20 +54,20 @@ RSpec.shared_examples_for 'a votable model' do
     end
 
     it 'should return 0 because of sum of votes' do
-      votable.votes.create!([ { vote: :for, user: users.first },
-                              { vote: :against, user: users.second }])
+      votable.votes.create!([ { vote: Vote::FOR, user: users.first },
+                              { vote: Vote::AGAINST, user: users.second }])
       expect(votable.rating).to eq(0)
     end
 
     it 'should return 2 because of sum of votes' do
-      votable.votes.create!([ { vote: :for, user: users.first },
-                              { vote: :for, user: users.second }])
+      votable.votes.create!([ { vote: Vote::FOR, user: users.first },
+                              { vote: Vote::FOR, user: users.second }])
       expect(votable.rating).to eq(2)
     end
 
     it 'should return -2 because of sum of votes' do
-      votable.votes.create!([ { vote: :against, user: users.first },
-                              { vote: :against, user: users.second }])
+      votable.votes.create!([ { vote: Vote::AGAINST, user: users.first },
+                              { vote: Vote::AGAINST, user: users.second }])
       expect(votable.rating).to eq(-2)
     end
   end

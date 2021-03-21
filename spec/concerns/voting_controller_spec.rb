@@ -13,7 +13,7 @@ RSpec.shared_examples_for 'a voting controller' do
       end
 
       it "doesn't create a new vote in the database" do
-        Vote.create!(vote: :for, user: user, votable: votable)
+        votable.votes.create!(vote: Vote::FOR, user: user)
         expect {
           post :vote_for, params: { id: votable.id }
         }.to_not change { Vote.count }
@@ -21,7 +21,7 @@ RSpec.shared_examples_for 'a voting controller' do
       end
 
       it 'removes a vote from the database' do
-        Vote.create!(vote: :against, user: user, votable: votable)
+        votable.votes.create!(vote: Vote::AGAINST, user: user)
         expect {
           post :vote_for, params: { id: votable.id }
         }.to change { Vote.count }.by(-1)
@@ -75,7 +75,7 @@ RSpec.shared_examples_for 'a voting controller' do
       end
 
       it "doesn't create a new vote in the database" do
-        Vote.create!(vote: :against, user: user, votable: votable)
+        votable.votes.create!(vote: Vote::AGAINST, user: user)
         expect {
           post :vote_against, params: { id: votable.id }
         }.to_not change { Vote.count }
@@ -83,7 +83,7 @@ RSpec.shared_examples_for 'a voting controller' do
       end
 
       it 'removes a vote from the database' do
-        Vote.create!(vote: :for, user: user, votable: votable)
+        votable.votes.create!(vote: Vote::FOR, user: user)
         expect {
           post :vote_against, params: { id: votable.id }
         }.to change { Vote.count }.by(-1)

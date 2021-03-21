@@ -33,6 +33,9 @@ RSpec.feature "User can vote for or against another user's answer", %q{
           end
           expect(page.find_link('Vote for')[:disabled]).to_not be_falsey
           expect(page.find_link('Vote against')[:disabled]).to be_falsey
+          page.refresh
+          expect(page.find_link('Vote for')[:disabled]).to_not be_falsey
+          expect(page.find_link('Vote against')[:disabled]).to be_falsey
         end
       end
 
@@ -43,6 +46,9 @@ RSpec.feature "User can vote for or against another user's answer", %q{
           within '.rating' do
             expect(page).to have_content '-1'
           end
+          expect(page.find_link('Vote for')[:disabled]).to be_falsey
+          expect(page.find_link('Vote against')[:disabled]).to_not be_falsey
+          page.refresh
           expect(page.find_link('Vote for')[:disabled]).to be_falsey
           expect(page.find_link('Vote against')[:disabled]).to_not be_falsey
         end
