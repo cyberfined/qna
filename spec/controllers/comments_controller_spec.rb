@@ -9,39 +9,61 @@ RSpec.describe CommentsController, type: :controller do
 
       before { sign_in(user) }
 
-      it 'creates a comment to the question' do
-        expect {
+      context 'with valid attributes' do
+        it 'creates a comment to the question' do
+          expect {
+            post :create, params: { commentable: { class: 'Question', id: question.id },
+                                    comment: comment, format: :js }
+          }.to change { question.comments.count }.by(1)
+        end
+
+        it 'creates a comment to the answer' do
+          answer = question.answers.create!(attributes_for(:answer, user: user))
+          expect {
+            post :create, params: { commentable: { class: 'Answer', id: answer.id },
+                                    comment: comment, format: :js }
+          }.to change { answer.comments.count }.by(1)
+        end
+
+        it 'publish new comment to the comments channel' do
           post :create, params: { commentable: { class: 'Question', id: question.id },
                                   comment: comment, format: :js }
-        }.to change { question.comments.count }.by(1)
-      end
+          assert_broadcast_on("comments_#{question.id}", Comment.first)
+        end
 
-      it 'creates a comment to the answer' do
-        answer = question.answers.create!(attributes_for(:answer, user: user))
-        expect {
-          post :create, params: { commentable: { class: 'Answer', id: answer.id },
+        it 'renders create template' do
+          post :create, params: { commentable: { class: 'Question', id: question.id },
                                   comment: comment, format: :js }
-        }.to change { answer.comments.count }.by(1)
+          expect(response).to render_template :create
+        end
       end
 
-      it 'tries to create a comment with an empty body' do
-        expect {
+      context 'with invalid attributes' do
+        it 'tries to create a comment with an empty body' do
+          expect {
+            post :create, params: { commentable: { class: 'Question', id: question.id },
+                                    comment: invalid_comment, format: :js }
+          }.to_not change { Comment.count }
+        end
+
+        it 'tries to create a comment to an uncommentable entity' do
+          expect {
+            post :create, params: { commentable: { class: 'User', id: user.id },
+                                    comment: comment, format: :js }
+          }.to_not change { Comment.count }
+        end
+
+        it "doesn't broadcast to the comments channel" do
           post :create, params: { commentable: { class: 'Question', id: question.id },
                                   comment: invalid_comment, format: :js }
-        }.to_not change { Comment.count }
-      end
+          assert_no_broadcasts("comments_#{question.id}")
+        end
 
-      it 'tries to create a comment to an uncommentable entity' do
-        expect {
-          post :create, params: { commentable: { class: 'User', id: user.id },
-                                  comment: comment, format: :js }
-        }.to_not change { Comment.count }
-      end
-
-      it 'renders create template' do
-        post :create, params: { commentable: { class: 'Question', id: question.id },
-                                comment: comment, format: :js }
-        expect(response).to render_template :create
+        it 'renders create template' do
+          post :create, params: { commentable: { class: 'Question', id: question.id },
+                                  comment: invalid_comment, format: :js }
+          expect(response).to render_template :create
+        end
       end
     end
 

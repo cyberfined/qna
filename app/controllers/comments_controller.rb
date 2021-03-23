@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   ALLOWABLE_COMMENTABLE_CLASSES = %w(Question Answer).freeze
 
   before_action :authenticate_user!, only: :create
+  after_action :publish_comment, only: :create
 
   expose :comment
 
@@ -26,5 +27,12 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def publish_comment
+    return unless comment.persisted?
+
+    channel = comment.commentable.broadcast_channel
+    ActionCable.server.broadcast(channel, comment) unless channel.nil?
   end
 end

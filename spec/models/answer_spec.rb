@@ -24,6 +24,16 @@ RSpec.describe Answer, type: :model do
     end
   end
 
+  describe 'broadcast_channel method' do
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
+    let!(:answer) { question.answers.create!(attributes_for(:answer, user: user)) }
+
+    it 'should return comments_#{answer.question.id}' do
+      expect(answer.broadcast_channel).to eql("comments_#{question.id}")
+    end
+  end
+
   describe 'mark_best! method' do
     let!(:user) { create(:user) }
 

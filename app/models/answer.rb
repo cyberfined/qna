@@ -15,6 +15,8 @@ class Answer < ApplicationRecord
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  set_broadcast_channel ->(a) { "comments_#{a.question.id}" }
+
   def mark_best!
     Answer.transaction do
       question.best_answer&.update!(best: false)

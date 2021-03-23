@@ -15,6 +15,8 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :reward, reject_if: :all_blank
 
+  set_broadcast_channel ->(q) { "comments_#{q.id}" }
+
   def best_answer
     answers.find_by(best: true)
   end

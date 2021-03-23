@@ -6,6 +6,8 @@ RSpec.feature 'User can create a comment to the answer', %q{
   given!(:user) { create(:user) }
   given!(:question) { user.questions.create!(attributes_for(:question)) }
   given!(:answer) { question.answers.create!(attributes_for(:answer, user: user)) }
+  given(:comment) { build(:comment) }
+  given(:invalid_comment) { build(:comment, :invalid) }
 
   def post_comment(comment)
     within '.comment-form-Answer' do
@@ -15,9 +17,6 @@ RSpec.feature 'User can create a comment to the answer', %q{
   end
 
   describe 'Authenticated user', js: true do
-    given(:comment) { build(:comment) }
-    given(:invalid_comment) { build(:comment, :invalid) }
-
     background do
       sign_in(user)
       visit question_path(question)
@@ -33,6 +32,24 @@ RSpec.feature 'User can create a comment to the answer', %q{
       post_comment(invalid_comment)
 
       expect(page).to have_content "Body can't be blank"
+    end
+  end
+
+  describe 'Multisession', js: true do
+    scenario 'appends new comment to the answer' do
+      using_session('another_user') do
+        visit question_path(question)
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+        post_comment(comment)
+      end
+
+      using_session('another_user') do
+        expect(page).to have_content "#{user.email}:#{comment.body}"
+      end
     end
   end
 
