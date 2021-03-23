@@ -22,6 +22,23 @@ class Answer < ApplicationRecord
     end
   end
 
+  def as_json(options=nil)
+    files_array = files.map do |f|
+      { id: f.id,
+        filename: f.filename.to_s,
+        url: Rails.application.routes.url_helpers.rails_blob_path(f, only_path: true)
+      }
+    end
+
+    { id: id,
+      body: body,
+      user_id: user_id,
+      best: best,
+      links: links,
+      files: files_array
+    }
+  end
+
   private
 
   def validate_best_answers

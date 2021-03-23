@@ -23,6 +23,21 @@ class Link < ApplicationRecord
     gist.files.map { |_,f| GistFile.new(f.filename, f.content) }
   end
 
+  def as_json(options=nil)
+    if gist?
+      { id: id,
+        gist: true,
+        content: gist_content
+      }
+    else
+      { id: id,
+        gist: false,
+        title: title,
+        url: url
+      }
+    end
+  end
+
   private
 
   def gist_id

@@ -59,4 +59,25 @@ RSpec.describe Link, type: :model do
       end
     end
   end
+
+  describe 'as_json method' do
+    let(:question) { create(:user).questions.create!(attributes_for(:question)) }
+
+    it "should return json with link's title and url" do
+      link = question.links.create!(title: 'example', url: 'https://example.com')
+      link_hash = link.as_json
+      expect(link_hash[:id]).to eq(link.id)
+      expect(link_hash[:title]).to eql(link.title)
+      expect(link_hash[:url]).to eql(link.url)
+      expect(link_hash[:gist]).to be_falsey
+    end
+
+    it "should return json with gist's content" do
+      link = question.links.create!(title: 'gist', url: 'https://gist.github.com/cyberfined/3263456890e06a904ac504961322118c')
+      link_hash = link.as_json
+      expect(link_hash[:id]).to eq(link.id)
+      expect(link_hash[:gist]).to be true
+      expect(link_hash[:content]).to eql(link.gist_content)
+    end
+  end
 end

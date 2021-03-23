@@ -85,4 +85,51 @@ RSpec.describe Answer, type: :model do
       expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
     end
   end
+
+  describe 'as_json method' do
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+    it 'should return hash with empty files and links' do
+      answer = question.answers.create!(attributes_for(:answer, user: user))
+
+      answer_hash = answer.as_json
+      expect(answer_hash[:id]).to eq(answer.id)
+      expect(answer_hash[:body]).to eql(answer.body)
+      expect(answer_hash[:user_id]).to eq(user.id)
+      expect(answer_hash[:best]).to eq(answer.best)
+      expect(answer_hash[:links]).to eq([])
+      expect(answer_hash[:files]).to eq([])
+    end
+    
+    it 'should return hash with links and empty files' do
+      answer = question.answers.create!(attributes_for(:answer, user: user))
+      link = answer.links.create!(title: 'example', url: 'https://example.com')
+
+      answer_hash = answer.as_json
+      expect(answer_hash[:id]).to eq(answer.id)
+      expect(answer_hash[:body]).to eql(answer.body)
+      expect(answer_hash[:user_id]).to eq(user.id)
+      expect(answer_hash[:best]).to eq(answer.best)
+      expect(answer_hash[:links]).to eq([link])
+      expect(answer_hash[:files]).to eq([])
+    end
+
+    it 'should return hash with links and files' do
+      answer = question.answers.create!(attributes_for(:answer, user: user))
+      link = answer.links.create!(title: 'example', url: 'https://example.com')
+      answer.files.attach(io: File.open(Rails.root.join('public', '404.html')), filename: '404.html')
+      file_hash = [{ id: answer.files.first.id,
+                     filename: answer.files.first.filename.to_s,
+                     url: Rails.application.routes.url_helpers.rails_blob_path(answer.files.first, only_path: true) }]
+
+      answer_hash = answer.as_json
+      expect(answer_hash[:id]).to eq(answer.id)
+      expect(answer_hash[:body]).to eql(answer.body)
+      expect(answer_hash[:user_id]).to eq(user.id)
+      expect(answer_hash[:best]).to eq(answer.best)
+      expect(answer_hash[:links]).to eq([link])
+      expect(answer_hash[:files]).to eql(file_hash)
+    end
+  end
 end

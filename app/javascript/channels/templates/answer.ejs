@@ -1,0 +1,38 @@
+<div class="answer" data-id="<%= answer.id %>">
+    <p><%= answer.body %></p>
+    <div class="vote-form">
+        <span>Rating:</span>
+        <span class="rating">0</span>
+        <% if(gon.user_id !== null) { %>
+            <p><a href="/answers/<%= answer.id %>/vote_for" class="vote-for" data-method="post" data-remote="true">Vote for</a></p>
+            <p><a href="/answers/<%= answer.id %>/vote_against" class="vote-against" data-method="post" data-remote="true">Vote against</a></p>
+        <% } %>
+    </div>
+    <div class="answer-links">
+        <% answer.links.forEach(link => { %>
+            <% if(link.gist) { %>
+                <% link.content.forEach(file => { %>
+                    <div class="gist">
+                        <p><%= file.filename %></p>
+                        <p><%= file.content %></p>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p><a href="<%= link.url %>" rel="nofollow" target="_blank"><%= link.title %></a></p>
+            <% } %>
+        <% }); %>
+    </div>
+    <div class="answer-files">
+        <% answer.files.forEach(file => { %>
+            <div class="attachment" data-id="<%= file.id %>">
+                <a href="<%= file.url %>"><%= file.filename %></a>
+            </div>
+        <% }); %>
+    </div>
+    <% if(gon.user_id == gon.question.user_id) { %>
+        <form class="button_to" method="post" action="/answers/<%= answer.id %>/mark_best" data-remote="true">
+            <input class="mark-best-answer-btn" type="submit" value="Mark best"/>
+            <input type="hidden" name="authenticity_token" value="<%= document.querySelector('meta[name=csrf-token]').content %>"/>
+        </form>
+    <% } %>
+</div>

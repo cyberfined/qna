@@ -1,4 +1,29 @@
 RSpec.describe QuestionsController, type: :controller do
+  include_context :gon
+
+  describe 'GET #show' do
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+    context 'when user is authenticated' do
+      before { sign_in user }
+
+      it 'should set gon.question_id and gon.user_id' do
+        get :show, params: { id: question.id }
+        expect(gon['question']).to eql({ id: question.id, user_id: user.id })
+        expect(gon['user_id']).to eq user.id
+      end
+    end
+
+    context 'when user is unauthenticated' do
+      it 'should set gon.question_id and gon.user_id' do
+        get :show, params: { id: question.id }
+        expect(gon['question']).to eql({ id: question.id, user_id: user.id })
+        expect(gon['user_id']).to eq nil
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'when user is authenticated' do
       before { sign_in create(:user) }
@@ -11,9 +36,9 @@ RSpec.describe QuestionsController, type: :controller do
         end
 
         it 'publish new question to the questions channel' do
-          question = attributes_for(:question)
-          post :create, params: { question: question }
-          assert_broadcast_on('questions', { id: 1, title: question[:title] })
+          post :create, params: { question: attributes_for(:question) }
+          question = Question.first
+          assert_broadcast_on('questions', { id: question.id, title: question.title })
         end
 
         it 'redirects to show view' do
@@ -29,7 +54,7 @@ RSpec.describe QuestionsController, type: :controller do
           }.not_to change { Question.count }
         end
 
-        it "doesn't broadcasr to the questions channel" do
+        it "doesn't broadcast to the questions channel" do
           post :create, params: { question: attributes_for(:question, :invalid) }
           assert_no_broadcasts('questions')
         end
@@ -48,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
         }.to_not change { Question.count }
       end
 
-      it "doesn't broadcasr to the questions channel" do
+      it "doesn't broadcast to the questions channel" do
         post :create, params: { question: attributes_for(:question, :invalid) }
         assert_no_broadcasts('questions')
       end

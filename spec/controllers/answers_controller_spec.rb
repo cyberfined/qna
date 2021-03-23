@@ -13,6 +13,12 @@ RSpec.describe AnswersController, type: :controller do
           }.to change { question.answers.count }.by(1)
         end
 
+        it 'publish new answer to the answers channel' do
+          post :create, params: { answer: attributes_for(:answer), question_id: question.id, format: :js }
+          answer = Answer.first
+          assert_broadcast_on("answers_#{question.id}", answer)
+        end
+
         it 'renders create template' do
           post :create, params: { answer: attributes_for(:answer), question_id: question.id, format: :js }
           expect(response).to render_template :create
@@ -24,6 +30,11 @@ RSpec.describe AnswersController, type: :controller do
           expect {
             post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, format: :js }
           }.to_not change { question.answers.count }
+        end
+
+        it "doesn't broadcast to the answers channel" do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, format: :js }
+          assert_no_broadcasts("answers_#{question.id}")
         end
 
         it 'renders create template' do
@@ -38,6 +49,11 @@ RSpec.describe AnswersController, type: :controller do
         expect {
           post :create, params: { answer: attributes_for(:answer), question_id: question.id }
         }.to_not change { question.answers.count }
+      end
+
+      it "doesn't broadcast to the answers channel" do
+        post :create, params: { answer: attributes_for(:answer), question_id: question.id }
+        assert_no_broadcasts("answers_#{question.id}")
       end
     end
   end
