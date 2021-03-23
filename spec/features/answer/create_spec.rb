@@ -9,16 +9,16 @@ RSpec.feature 'User can give answer to a question', %q{
                    Rails.root.join(Rails.public_path, '404.html') ]}
 
   def post_answer(answer, files=[], link=nil)
-    fill_in 'Body', with: answer.body
-    attach_file 'Files', files unless files.empty?
-    unless link.nil?
-      within '.create-answer-form' do
+    within '.create-answer-form' do
+      fill_in 'Body', with: answer.body
+      attach_file 'Files', files unless files.empty?
+      unless link.nil?
         click_on 'Add link'
         fill_in 'Link title', with: link.title
         fill_in 'Link url', with: link.url
       end
+      click_on 'Answer'
     end
-    click_on 'Answer'
   end
 
   describe 'Authenticated user', js: true do
@@ -82,6 +82,10 @@ RSpec.feature 'User can give answer to a question', %q{
           expect(page).to have_link link.title, href: link.url
           expect(page).to have_link '403.html'
           expect(page).to have_link '403.html'
+          within 'comment-form-Answer' do
+            expect(page).to have_field 'Body'
+            expect(page).to have_button 'Comment'
+          end
           expect(page).to have_no_button 'Mark best'
         end
       end
@@ -112,6 +116,10 @@ RSpec.feature 'User can give answer to a question', %q{
           expect(page).to have_content 'Test content 2'
           expect(page).to have_link '403.html'
           expect(page).to have_link '403.html'
+          within 'comment-form-Answer' do
+            expect(page).to have_field 'Body'
+            expect(page).to have_button 'Comment'
+          end
           expect(page).to have_no_button 'Mark best'
         end
       end
@@ -137,6 +145,7 @@ RSpec.feature 'User can give answer to a question', %q{
           expect(page).to have_link link.title, href: link.url
           expect(page).to have_link '403.html'
           expect(page).to have_link '403.html'
+          expect(page).to have_no_button 'Comment'
           expect(page).to have_no_button 'Mark best'
         end
       end

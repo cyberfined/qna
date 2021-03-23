@@ -1,0 +1,10 @@
+(function() {
+  const cls = "<%= comment.commentable.class.name %>";
+  const id = "<%= comment.commentable.id %>";
+  document.querySelector(".comments-errors").innerHTML = "<%= j render 'shared/errors', resource: comment %>";
+
+  <% if comment.persisted? %>
+    document.querySelector(`.comment-form-${cls}[data-id="${id}"] input[type="text"]`).value = "";
+    document.querySelector(`.comments-${cls}[data-id="${id}"]`).innerHTML += "<%= j render comment %>";
+  <% end %>
+}());

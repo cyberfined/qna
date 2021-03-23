@@ -17,8 +17,10 @@ RSpec.feature 'User can select the best answer to his question', %q{
         click_on question.title
 
         answers.each do |ans|
-          fill_in 'Body', with: ans.body
-          click_on 'Answer'
+          within '.create-answer-form' do
+            fill_in 'Body', with: ans.body
+            click_on 'Answer'
+          end
         end
       end
 
