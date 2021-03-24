@@ -40,6 +40,9 @@ gem 'gon'
 # Devise for authentication
 gem 'devise'
 
+# CanCanCan for authorization
+gem 'cancancan'
+
 # Cocoon for nested forms
 gem 'cocoon'
 
