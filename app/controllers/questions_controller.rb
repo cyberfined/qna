@@ -2,6 +2,8 @@ class QuestionsController < ApplicationController
   include Voting
 
   before_action :authenticate_user!, only: %i[new create update destroy vote_for vote_against]
+  before_action :set_gon_variables, only: :show
+  after_action :publish_question, only: :create
 
   expose :questions, ->{ Question.all }
   expose :question, scope: -> { Question.with_attached_files }
@@ -39,5 +41,19 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, files: [],
                                      links_attributes: [:id, :title, :url, :_destroy],
                                      reward_attributes: [:title, :picture])
+  end
+
+  def publish_question
+    return unless question.persisted?
+
+    ActionCable.server.broadcast('questions', { id: question.id, title: question.title })
+  end
+
+  def set_gon_variables
+    gon.question = {
+      id: question.id,
+      user_id: question.user.id
+    }
+    gon.user_id = current_user&.id
   end
 end

@@ -51,6 +51,27 @@ RSpec.feature 'User can ask a question', %q{
 
       expect(page).to have_content "Body can't be blank"
     end
+
+    scenario 'watches a question that just have been created by another user', js: true do
+      using_session('user') do
+        sign_in(user)
+        visit questions_path
+        click_on 'Ask question'
+      end
+
+      using_session('another_user') do
+        visit questions_path
+        expect(page).to have_no_link question.title
+      end
+
+      using_session('user') do
+        ask_question(question)
+      end
+
+      using_session('another_user') do
+        expect(page).to have_link question.title
+      end
+    end
   end
 
   scenario 'Unauthenticated user tries to ask a question' do

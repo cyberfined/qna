@@ -5,11 +5,20 @@ RSpec.feature 'User can give answer to a question', %q{
 } do
   given!(:user) { create(:user) }
   given!(:question) { user.questions.create!(attributes_for(:question)) }
+  given(:files) {[ Rails.root.join(Rails.public_path, '403.html'),
+                   Rails.root.join(Rails.public_path, '404.html') ]}
 
-  def post_answer(answer, files=[])
-    fill_in 'Body', with: answer.body
-    attach_file 'Files', files unless files.empty?
-    click_on 'Answer'
+  def post_answer(answer, files=[], link=nil)
+    within '.create-answer-form' do
+      fill_in 'Body', with: answer.body
+      attach_file 'Files', files unless files.empty?
+      unless link.nil?
+        click_on 'Add link'
+        fill_in 'Link title', with: link.title
+        fill_in 'Link url', with: link.url
+      end
+      click_on 'Answer'
+    end
   end
 
   describe 'Authenticated user', js: true do
@@ -30,8 +39,6 @@ RSpec.feature 'User can give answer to a question', %q{
     end
 
     scenario 'answers to the question with files attachment' do
-      files = [ Rails.root.join(Rails.public_path, '403.html'),
-                Rails.root.join(Rails.public_path, '404.html') ]
       post_answer(answer, files)
 
       within '.answers' do
@@ -45,6 +52,103 @@ RSpec.feature 'User can give answer to a question', %q{
       post_answer(bodyless_answer)
 
       expect(page).to have_content "Body can't be blank"
+    end
+  end
+
+  describe 'Multisession', js: true do
+    given(:answer) { build(:answer) }
+    given(:link) { Link.new(title: 'google', url: 'https://google.com') }
+    given(:gist_link) { Link.new(title: 'gist', url: 'https://gist.github.com/cyberfined/3263456890e06a904ac504961322118c') }
+
+    scenario 'appends new answer' do
+      another_user = create(:user)
+      using_session('another_user') do
+        sign_in(another_user)
+        visit question_path(question)
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+        post_answer(answer, files, link)
+      end
+
+      using_session('another_user') do
+        within '.answers' do
+          expect(page).to have_content answer.body
+          expect(page).to have_content 'Rating: 0'
+          expect(page).to have_link 'Vote for'
+          expect(page).to have_link 'Vote against'
+          expect(page).to have_link link.title, href: link.url
+          expect(page).to have_link '403.html'
+          expect(page).to have_link '403.html'
+          within 'comment-form-Answer' do
+            expect(page).to have_field 'Body'
+            expect(page).to have_button 'Comment'
+          end
+          expect(page).to have_no_button 'Mark best'
+        end
+      end
+    end
+
+    scenario 'appends new answer with gist link' do
+      another_user = create(:user)
+      using_session('another_user') do
+        sign_in(another_user)
+        visit question_path(question)
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+        post_answer(answer, files, gist_link)
+      end
+
+      using_session('another_user') do
+        within '.answers' do
+          expect(page).to have_content answer.body
+          expect(page).to have_content 'Rating: 0'
+          expect(page).to have_link 'Vote for'
+          expect(page).to have_link 'Vote against'
+          expect(page).to have_content 'Test file 1'
+          expect(page).to have_content 'Test content 1'
+          expect(page).to have_content 'Test file 2'
+          expect(page).to have_content 'Test content 2'
+          expect(page).to have_link '403.html'
+          expect(page).to have_link '403.html'
+          within 'comment-form-Answer' do
+            expect(page).to have_field 'Body'
+            expect(page).to have_button 'Comment'
+          end
+          expect(page).to have_no_button 'Mark best'
+        end
+      end
+    end
+
+    scenario 'appends new answer to unauthenticated user' do
+      using_session('unauth_user') do
+        visit question_path(question)
+      end
+
+      using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+        post_answer(answer, files, link)
+      end
+
+      using_session('unauth_user') do
+        within '.answers' do
+          expect(page).to have_content answer.body
+          expect(page).to have_content 'Rating: 0'
+          expect(page).to have_no_link 'Vote for'
+          expect(page).to have_no_link 'Vote against'
+          expect(page).to have_link link.title, href: link.url
+          expect(page).to have_link '403.html'
+          expect(page).to have_link '403.html'
+          expect(page).to have_no_button 'Comment'
+          expect(page).to have_no_button 'Mark best'
+        end
+      end
     end
   end
 

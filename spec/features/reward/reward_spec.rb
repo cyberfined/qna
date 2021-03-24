@@ -30,8 +30,10 @@ RSpec.feature 'User is rewarded if his answer will be the best', %q{
     end
 
     def post_answer(answer)
-      fill_in 'Body', with: answer.body
-      click_on 'Answer'
+      within '.create-answer-form' do
+        fill_in 'Body', with: answer.body
+        click_on 'Answer'
+      end
     end
 
     scenario 'gives reward to the first answerer' do

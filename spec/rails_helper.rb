@@ -36,6 +36,7 @@ RSpec.configure do |config|
   # Include helpers
   config.include FeatureHelpers, type: :feature
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include ActionCable::TestHelper, type: :controller
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   # Use firefox to tests with javascript

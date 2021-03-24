@@ -26,6 +26,15 @@ RSpec.describe Question, type: :model do
     end
   end
 
+  describe 'broadcast_channel method' do
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+    it 'should return comments_#{question.id}' do
+      expect(question.broadcast_channel).to eql("comments_#{question.id}")
+    end
+  end
+
   describe 'active storage tests' do
     it 'have many attached files' do
       expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)

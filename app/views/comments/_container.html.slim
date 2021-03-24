@@ -1,0 +1,2 @@
+= content_tag :div, class: "comments comments-#{commentable.class.name}", data: { id: commentable.id } do
+  = render commentable.comments

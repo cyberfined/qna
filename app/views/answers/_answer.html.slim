@@ -5,6 +5,9 @@
     = render answer.links
   .answer-files
     = render 'shared/file_links', files: answer.files
+  = render 'comments/container', commentable: answer
+  - if user_signed_in?
+    = render 'comments/form', commentable: answer
   - if current_user&.author_of?(answer.question)
     = mark_answer_best_button(answer)
   - if current_user&.author_of?(answer)

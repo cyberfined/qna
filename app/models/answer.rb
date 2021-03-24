@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include Votable
+  include Commentable
 
   belongs_to :user
   belongs_to :question
@@ -14,12 +15,31 @@ class Answer < ApplicationRecord
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  set_broadcast_channel ->(a) { "comments_#{a.question.id}" }
+
   def mark_best!
     Answer.transaction do
       question.best_answer&.update!(best: false)
       update!(best: true)
       question.reward&.give!(user)
     end
+  end
+
+  def as_json(options=nil)
+    files_array = files.map do |f|
+      { id: f.id,
+        filename: f.filename.to_s,
+        url: Rails.application.routes.url_helpers.rails_blob_path(f, only_path: true)
+      }
+    end
+
+    { id: id,
+      body: body,
+      user_id: user_id,
+      best: best,
+      links: links,
+      files: files_array
+    }
   end
 
   private

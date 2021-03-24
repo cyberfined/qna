@@ -18,12 +18,17 @@ h3 Files
 
   h3 Create answer
   .answer-errors
-
   .create-answer-form
     = form_with model: [question, answer], local: false do |form|
       = render 'answers/form', form: form
       p = form.submit 'Answer'
 
+  h3 Create comment
+  = render 'comments/form', commentable: question
+
+h2 Comments
+.comments-errors
+= render 'comments/container', commentable: question
 h2 Answers
 .answers
   = render question.answers.best_first
