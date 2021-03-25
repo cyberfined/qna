@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   include Voting
 
   before_action :authenticate_user!, only: %i[new create update destroy vote_for vote_against]
+  before_action :authorize_question!, except: %i[vote_for vote_against]
   before_action :set_gon_variables, only: :show
   after_action :publish_question, only: :create
 
@@ -19,23 +20,19 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(question)
-      question.update(question_params)
-    else
-      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
-    end
+    question.update(question_params)
   end
 
   def destroy
-    if current_user.author_of?(question)
-      question.destroy
-      redirect_to :questions, notice: 'You successfully delete the question'
-    else
-      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
-    end
+    question.destroy
+    redirect_to :questions, notice: 'You successfully delete the question'
   end
 
   private
+
+  def authorize_question!
+    authorize!(params[:action].to_sym, question)
+  end
 
   def question_params
     params.require(:question).permit(:title, :body, files: [],

@@ -1,6 +1,6 @@
 module VoteHelper
   def vote_links(votable)
-    if user_signed_in? && !current_user.author_of?(votable)
+    if can? :vote, votable
       vote = votable.votes.find_by(user: current_user)
       disable_first = vote&.for?
       disable_second = vote&.against?

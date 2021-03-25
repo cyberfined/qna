@@ -15,16 +15,11 @@ module Voting
     private
 
     def vote(vote_method)
-      if current_user.author_of?(@votable)
-        render status: :forbidden, json: {
-          message: "Author can't vote for his #{controller_name.classify.downcase}"
-        }
-      else
-        vote_method.call(current_user)
-        render json: {
-          rating: @votable.rating
-        }
-      end
+      authorize!(:vote, @votable)
+      vote_method.call(current_user)
+      render json: {
+        rating: @votable.rating
+      }
     end
 
     def find_votable

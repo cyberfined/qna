@@ -6,11 +6,16 @@
   .answer-files
     = render 'shared/file_links', files: answer.files
   = render 'comments/container', commentable: answer
-  - if user_signed_in?
+
+  - if can? :create, Comment
     = render 'comments/form', commentable: answer
-  - if current_user&.author_of?(answer.question)
+
+  - if can? :mark_best, answer
     = mark_answer_best_button(answer)
-  - if current_user&.author_of?(answer)
+
+  - if can? :update, answer
     = render 'answers/update_form', answer: answer
     = content_tag :button, 'Edit answer', onclick: 'editAnswerButtonHandler(this)', class: 'edit-answer-button', data: { id: answer.id }
+
+  - if can? :destroy, answer
     = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete

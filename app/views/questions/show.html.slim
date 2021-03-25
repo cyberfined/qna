@@ -8,14 +8,17 @@ h3 Links
 h3 Files
 .question-files
   = render 'shared/file_links', files: question.files
-- if user_signed_in?
-  - if current_user.author_of?(question)
-    .question-errors
-    = render 'update_form'
-    button id='edit-question-button'
-      | Edit question
-    = button_to 'Delete question', question_path(question), method: :delete
 
+- if can? :update, question
+  .question-errors
+  = render 'update_form'
+  button id='edit-question-button'
+    | Edit question
+
+- if can? :destroy, question
+  = button_to 'Delete question', question_path(question), method: :delete
+
+- if can? :create, Answer
   h3 Create answer
   .answer-errors
   .create-answer-form
@@ -23,12 +26,14 @@ h3 Files
       = render 'answers/form', form: form
       p = form.submit 'Answer'
 
+- if can? :create, Comment
   h3 Create comment
   = render 'comments/form', commentable: question
 
 h2 Comments
 .comments-errors
 = render 'comments/container', commentable: question
+
 h2 Answers
 .answers
   = render question.answers.best_first
