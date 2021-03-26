@@ -44,9 +44,8 @@ RSpec.shared_examples_for 'a voting controller' do
         expect(votable.rating).to eq(0)
       end
 
-      it 'renders a json with an error' do
+      it 'returns an unauthorized error' do
         post :vote_for, params: { id: votable.id }
-        expect(response.content_type).to eq('application/json; charset=utf-8')
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -106,9 +105,8 @@ RSpec.shared_examples_for 'a voting controller' do
         expect(votable.rating).to eq(0)
       end
 
-      it 'renders a json with an error' do
+      it 'returns an unauthorized error' do
         post :vote_against, params: { id: votable.id }
-        expect(response.content_type).to eq('application/json; charset=utf-8')
         expect(response).to have_http_status(:forbidden)
       end
     end

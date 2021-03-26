@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   include Voting
 
   before_action :authenticate_user!, only: %i[create update destroy mark_best vote_for vote_against]
+  before_action :authorize_answer!, except: %i[vote_for vote_against]
   after_action :publish_answer, only: :create
 
   expose :answer, scope: -> { Answer.with_attached_files }
@@ -14,30 +15,22 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(answer)
-      answer.update(answer_params)
-    else
-      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
-    end
+    answer.update(answer_params)
   end
 
   def destroy
-    if current_user.author_of?(answer)
-      answer.destroy
-    else
-      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
-    end
+    answer.destroy
   end
 
   def mark_best
-    if current_user.author_of?(answer.question)
-      answer.mark_best!
-    else
-      render file: Rails.root.join(Rails.public_path, "403.html"), status: :forbidden
-    end
+    answer.mark_best!
   end
 
   private
+
+  def authorize_answer!
+    authorize!(params[:action].to_sym, answer)
+  end
 
   def answer_params
     params.require(:answer).permit(:body, files: [],

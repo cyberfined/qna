@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   ALLOWABLE_COMMENTABLE_CLASSES = %w(Question Answer).freeze
 
   before_action :authenticate_user!, only: :create
+  before_action :authorize_comment!
   after_action :publish_comment, only: :create
 
   expose :comment
@@ -13,6 +14,10 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def authorize_comment!
+    authorize!(params[:action].to_sym, comment)
+  end
 
   def commentable
     params = commentable_params
