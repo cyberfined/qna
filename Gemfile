@@ -47,10 +47,16 @@ gem 'cancancan'
 gem 'cocoon'
 
 # Octokit for fetching gists content
-gem "octokit", "~> 4.0"
+gem 'octokit', '~> 4.0'
 
 # Gem to work with azure
-gem "azure-storage-blob", require: false
+gem 'azure-storage-blob', require: false
+
+# Doorkeeper for OAuth
+gem 'doorkeeper'
+
+# Active model serializers for JSON
+gem 'active_model_serializers', '~> 0.10'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
