@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
+  use_doorkeeper
+
   devise_for :users
 
   concern :votable do
