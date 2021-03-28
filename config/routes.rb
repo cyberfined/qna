@@ -20,6 +20,18 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+
+      resources :questions, except: %i[new edit] do
+        resources :answers, shallow: true, except: %i[new edit]
+      end
+    end
+  end
+
   resources :comments, only: :create
 
   resources :rewards, only: :index

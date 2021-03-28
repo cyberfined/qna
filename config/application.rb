@@ -12,6 +12,7 @@ module Qna
     config.load_defaults 6.1
     config.time_zone = 'Moscow'
     config.i18n.default_locale = :en
+    config.eager_load_paths << Rails.root.join('lib')
 
     # Configuration for the application, engines, and railties goes here.
     #

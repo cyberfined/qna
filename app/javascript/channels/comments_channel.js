@@ -6,6 +6,8 @@ document.addEventListener("turbolinks:load", () => {
 
     consumer.subscriptions.create({ channel: "CommentsChannel", id: gon.question.id }, {
       received(comment) {
+          comment = comment.comment;
+
           if(comment.user.id === gon.user_id)
               return;
 

@@ -15,8 +15,8 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'publish new answer to the answers channel' do
           post :create, params: { answer: attributes_for(:answer), question_id: question.id, format: :js }
-          answer = Answer.first
-          assert_broadcast_on("answers_#{question.id}", answer)
+          coder = SerializeEncoder.new
+          assert_broadcast_with_encoder("answers_#{question.id}", Answer.first, coder: coder)
         end
 
         it 'renders create template' do

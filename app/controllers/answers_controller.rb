@@ -40,6 +40,7 @@ class AnswersController < ApplicationController
   def publish_answer
     return unless answer.persisted?
 
-    ActionCable.server.broadcast("answers_#{question.id}", answer)
+    coder = SerializeEncoder.new
+    ActionCable.server.broadcast("answers_#{question.id}", answer, coder: coder)
   end
 end
