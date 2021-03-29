@@ -13,6 +13,7 @@ module Qna
     config.time_zone = 'Moscow'
     config.i18n.default_locale = :en
     config.eager_load_paths << Rails.root.join('lib')
+    config.action_mailer.default_url_options = { host: 'qna.com' }
 
     # Configuration for the application, engines, and railties goes here.
     #
