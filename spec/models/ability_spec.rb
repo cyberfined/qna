@@ -23,6 +23,9 @@ RSpec.describe Ability, type: :model do
     it { should_not be_able_to :update, Comment }
     it { should_not be_able_to :destroy, Comment }
 
+    it { should_not be_able_to :create, Subscription }
+    it { should_not be_able_to :destroy, Subscription }
+
     it { should_not be_able_to :destroy, ActiveStorage::Attachment }
   end
 
@@ -38,6 +41,9 @@ RSpec.describe Ability, type: :model do
 
     let(:comment) { question.comments.create!(attributes_for(:comment, user: user)) }
     let(:another_comment) { question.comments.create!(attributes_for(:comment, user: another_user)) }
+
+    let(:subscription) { Subscription.create!(user: user, question: another_question) }
+    let(:another_subscription) { Subscription.create!(user: another_user, question: question) }
 
     let(:attachment) do
       question.files.attach(io: File.open(Rails.root.join('public', '404.html')), 
@@ -76,6 +82,10 @@ RSpec.describe Ability, type: :model do
     it { should be_able_to :destroy, comment }
     it { should_not be_able_to :update, another_comment }
     it { should_not be_able_to :destroy, another_comment }
+
+    it { should be_able_to :create, Subscription }
+    it { should be_able_to :destroy, subscription }
+    it { should_not be_able_to :destroy, another_subscription }
 
     it { should be_able_to :destroy, attachment }
     it { should_not be_able_to :destroy, another_attachment }

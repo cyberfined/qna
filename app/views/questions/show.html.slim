@@ -9,6 +9,8 @@ h3 Files
 .question-files
   = render 'shared/file_links', files: question.files
 
+= render 'subscribe_form'
+
 - if can? :update, question
   .question-errors
   = render 'update_form'

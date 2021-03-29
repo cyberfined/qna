@@ -18,6 +18,8 @@ Rails.application.routes.draw do
         post :mark_best
       end
     end
+
+    resources :subscriptions, only: %i[create destroy], shallow: true
   end
 
   namespace :api do
