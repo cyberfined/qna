@@ -35,8 +35,10 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   # Include helpers
   config.include FeatureHelpers, type: :feature
+  config.include ApiHelpers, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ActionCable::TestHelper, type: :controller
+  config.include ActionCableHelpers, type: :controller
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   # Use firefox to tests with javascript

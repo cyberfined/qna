@@ -8,7 +8,8 @@ document.addEventListener("turbolinks:load", () => {
 
     consumer.subscriptions.create({ channel: "AnswersChannel", id: gon.question.id }, {
       received(answer) {
-          if(answer.user_id !== gon.user_id) {
+          answer = answer.answer;
+          if(answer.user.id !== gon.user_id) {
               const ansTempl = require("!!ejs-compiled-loader?{}!./templates/answer.ejs");
               answers.innerHTML += ansTempl({ answer: answer });
               const voteForm = document.querySelector(`.answer[data-id="${answer.id}"] .vote-form`);

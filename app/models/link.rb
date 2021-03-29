@@ -13,7 +13,7 @@ class Link < ApplicationRecord
   validates :url, presence: true, format: URL_REGEXP
 
   def gist?
-    url =~ GIST_REGEXP
+    GIST_REGEXP.match?(url)
   end
 
   def gist_content
@@ -21,21 +21,6 @@ class Link < ApplicationRecord
 
     gist = Octokit::Client.new.gist(gist_id)
     gist.files.map { |_,f| GistFile.new(f.filename, f.content) }
-  end
-
-  def as_json(options=nil)
-    if gist?
-      { id: id,
-        gist: true,
-        content: gist_content
-      }
-    else
-      { id: id,
-        gist: false,
-        title: title,
-        url: url
-      }
-    end
   end
 
   private

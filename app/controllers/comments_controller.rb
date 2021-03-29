@@ -38,6 +38,9 @@ class CommentsController < ApplicationController
     return unless comment.persisted?
 
     channel = comment.commentable.broadcast_channel
-    ActionCable.server.broadcast(channel, comment) unless channel.nil?
+    if channel
+      coder = SerializeEncoder.new(serializer: AppCommentSerializer)
+      ActionCable.server.broadcast(channel, comment, coder: coder)
+    end
   end
 end

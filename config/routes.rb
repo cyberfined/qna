@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
+  use_doorkeeper
+
   devise_for :users
 
   concern :votable do
@@ -14,6 +16,18 @@ Rails.application.routes.draw do
     resources :answers, only: %i[create update destroy], concerns: :votable, shallow: true do
       member do
         post :mark_best
+      end
+    end
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+
+      resources :questions, except: %i[new edit] do
+        resources :answers, shallow: true, except: %i[new edit]
       end
     end
   end

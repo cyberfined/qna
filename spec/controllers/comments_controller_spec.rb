@@ -28,7 +28,8 @@ RSpec.describe CommentsController, type: :controller do
         it 'publish new comment to the comments channel' do
           post :create, params: { commentable: { class: 'Question', id: question.id },
                                   comment: comment, format: :js }
-          assert_broadcast_on("comments_#{question.id}", Comment.first)
+          coder = SerializeEncoder.new(serializer: AppCommentSerializer)
+          assert_broadcast_with_encoder("comments_#{question.id}", Comment.first, coder: coder)
         end
 
         it 'renders create template' do
