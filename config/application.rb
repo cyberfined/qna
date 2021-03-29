@@ -15,6 +15,13 @@ module Qna
     config.eager_load_paths << Rails.root.join('lib')
     config.action_mailer.default_url_options = { host: 'qna.com' }
 
+
+    if Rails.env.test?
+      config.active_job.queue_adapter = :test
+    else
+      config.active_job.queue_adapter = :sidekiq
+    end
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
