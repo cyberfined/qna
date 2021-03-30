@@ -1,5 +1,11 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   root to: 'questions#index'
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   use_doorkeeper
 
@@ -18,6 +24,8 @@ Rails.application.routes.draw do
         post :mark_best
       end
     end
+
+    resources :subscriptions, only: %i[create destroy], shallow: true
   end
 
   namespace :api do

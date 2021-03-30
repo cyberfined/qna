@@ -15,6 +15,8 @@ class Answer < ApplicationRecord
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  after_create :run_notification_job
+
   set_broadcast_channel ->(a) { "comments_#{a.question.id}" }
 
   def mark_best!
@@ -31,5 +33,9 @@ class Answer < ApplicationRecord
     if question.present? && question.answers.where(best: true).count >= 1
       errors.add(:question, 'can have only one best answer')
     end
+  end
+
+  def run_notification_job
+    NewAnswerNotifyJob.perform_later(self)
   end
 end

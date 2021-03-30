@@ -34,6 +34,17 @@ RSpec.describe Answer, type: :model do
     end
   end
 
+  describe 'NewAnswerNotifyJob' do
+    let!(:user) { create(:user) }
+    let!(:question) { user.questions.create!(attributes_for(:question)) }
+
+    it 'checks if NewAnswerNotifyJob was started' do
+      expect {
+        question.answers.create!(attributes_for(:answer, user: user))
+      }.to have_enqueued_job(NewAnswerNotifyJob)
+    end
+  end
+
   describe 'mark_best! method' do
     let!(:user) { create(:user) }
 

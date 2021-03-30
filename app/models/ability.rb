@@ -7,8 +7,9 @@ class Ability
     can :read, :all
     return if user.nil?
 
-    can :create, [Question, Answer, Comment]
+    can :create, [Question, Answer, Comment, Subscription]
     can [:update, :destroy], [Question, Answer, Comment], user_id: user.id
+    can :destroy, Subscription, user_id: user.id
     can :mark_best, Answer do |a|
       user.author_of?(a.question)
     end

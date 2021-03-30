@@ -4,11 +4,27 @@ RSpec.describe Question, type: :model do
     it { should have_many(:answers).dependent(:destroy) }
     it { should have_many(:links).dependent(:destroy) }
     it { should have_one(:reward).dependent(:destroy) }
+    it { should have_many(:subscriptions).dependent(:destroy) }
   end
 
   describe 'validations' do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:body) }
+  end
+
+  describe 'subscription creation' do
+    let!(:user) { create(:user) }
+
+    it 'should create subscription' do
+      expect {
+        user.questions.create!(attributes_for(:question))
+      }.to change { Subscription.count }.by(1)
+    end
+
+    it 'should create subscription for author and question' do
+      question = user.questions.create!(attributes_for(:question))
+      expect(question.subscriptions.first.user).to eq(user)
+    end
   end
 
   describe 'best_answer method' do

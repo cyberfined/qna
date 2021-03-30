@@ -1,0 +1,8 @@
+(function() {
+  const unsubscribeBtn = document.querySelector(".unsubscribe-btn");
+  unsubscribeBtn.innerHTML = "Subscribe"
+  unsubscribeBtn.classList.remove("unsubscribe-btn");
+  unsubscribeBtn.classList.add("subscribe-btn");
+  unsubscribeBtn.dataset.method = "post";
+  unsubscribeBtn.href = "<%= question_subscriptions_path(subscription.question) %>";
+}());
